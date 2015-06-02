@@ -13,13 +13,13 @@ function[HI]  = runHATmodel()
 LivStock = 0;                        % Whether to include Livestock dynamics or not
 
 %% Asymtomatic carriers
-AsymCarrier = 1;
-if AsymCarrier ==1
+AsymCarrier = 0;
+if AsymCarrier == 1
     alpha = 1;                       % Switch variable for asym. carr.
     nuH  = 0.84;                     % Proportion of individuals becoming infectious.
 else
     alpha = 0;                       % Switch variable for
-                                     % asym. carr.
+    nuH = 1;                                 % asym. carr.
 
 end
 
@@ -31,7 +31,7 @@ muV1 = 0.0002;                       % Death rate competition parameters
 sigmaV = 365.;                       % 1/sigmaV: Susceptibility period in Tsetse
 aH = 365*0.075;                      % Tsetse human biting rate
 aL = 365*0.175;                      % Tsetse Livestock biting rate
-betaVH = 0.065;                      % Tran. prob. from humans to Tsetse
+betaVH = 0.165;                      % Tran. prob. from humans to Tsetse
 betaVL = 0.065;                      % Tran. prob. from Livestock to Tsetse
 tauV = 365./25;                      % 1/tauV: incubation period in tsetse
 V = 5000;                            % Tsetse population size (carrying capacity)
@@ -104,6 +104,8 @@ end
 
 HI = HI1(end) + HI2(end);
 
+
+
 %close all
 figure;
 subplot(2,2,1)
@@ -145,6 +147,8 @@ title('H_E')
 box('off')
 subplot(2,2,3)
 plot(t,HC,'k',t, HI1,'r',t,HI2, 'linewidth',2);
+xlabel('Years')
+ylabel('No. of people')
 %xlim([0,80]);
 title('H_C, H_{I_1} & H_{I_2}')
 legend('H_C','H_{I_1}','H_{I_2}')
@@ -152,7 +156,7 @@ box('off')
 subplot(2,2,4)
 plot(t,HR,'c','linewidth',2);
 title('H_{R}')
-xlim([0,80]);
+%xlim([0,80]);
 box('off')
 
 if LivStock ==1
