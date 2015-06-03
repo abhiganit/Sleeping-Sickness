@@ -1,4 +1,4 @@
-function[HI]  = runHATmodel()
+function[HI]  = runHATintervention()
 
 %% Notes
 %  1. BASE CASE: LivStock and AsymCarrier variable  should be set to
@@ -8,6 +8,8 @@ function[HI]  = runHATmodel()
 %  3. ASYMTOMATIC CARRIERS: For asymptomatic carriers, set
 %     AsymCarrier = 1 and LivStock = 0.
 
+%% Interventions implemented
+% Increasing the treatment rate => More people recovering
 
 %% Animal reservoir
 LivStock = 0;                        % Whether to include Livestock dynamics or not
@@ -32,7 +34,7 @@ muV1 = 0.0002;                       % Death rate competition parameters
 sigmaV = 365.;                       % 1/sigmaV: Susceptibility period in Tsetse
 aH = 365*0.075;                      % Tsetse human biting rate
 aL = 365*0.175;                      % Tsetse Livestock biting rate
-betaVH = 0.065;                      % Tran. prob. from humans to Tsetse
+betaVH = 0.1189;                      % Tran. prob. from humans to Tsetse
 betaVL = 0.065;                      % Tran. prob. from Livestock to Tsetse
 tauV = 365./25;                      % 1/tauV: incubation period in tsetse
 V = 5000;                            % Tsetse population size (carrying capacity)
@@ -85,11 +87,28 @@ end
 
 
 % Time span
-tspan = linspace(0,1000,1000) ;        % In years
+tspan = linspace(0,1000,1000) ;        % In years (for asym. case 1000->5000)
 
 
-% ODE solver
+% ODE solver (run model to equilibrium)
 [t,y] = ode15s(@HATmodel,tspan, y0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
+               aL,betaVH,betaVL,tauV,muH,betaH,tauH,nuH,k1,k2,gammaHC,gammaH1,gammaH2, ...
+               betaL,tauL,gammaL,deltaL,P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
+               eps2,p2,deltaH,LivStock,alpha);
+
+
+%% Running model with Interventions
+ye0 = y(end,:); % Initializing from equilibrium
+tint = linspace(0,500,5*360); % Running model for 5 years
+
+% Intervention Parameters
+% $$$ P1 = 1.2; % Increased coverage due to active case-finding
+% $$$ P2 = 1.2; % Increased coverage due to active case-finding
+% $$$ P1PD = 0.87;
+% $$$ P2PD = 0.87;
+
+
+[t,y] = ode15s(@HATmodel,tint, ye0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
                aL,betaVH,betaVL,tauV,muH,betaH,tauH,nuH,k1,k2,gammaHC,gammaH1,gammaH2, ...
                betaL,tauL,gammaL,deltaL,P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
                eps2,p2,deltaH,LivStock,alpha);
