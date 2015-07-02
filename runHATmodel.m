@@ -16,7 +16,7 @@ LivStock = 0;                        % Whether to include Livestock dynamics or 
 AsymCarrier = 0;
 if AsymCarrier == 1
     alpha = 1;                       % Switch variable for asym. carr.
-    nuH  = 0.8384;                     % Proportion of individuals becoming infectious.
+    nuH  = 0.6301;                     % Proportion of individuals becoming infectious.
 else
     alpha = 0;                       % Switch variable for asym. carr.
     nuH = 1;                         % Proportion of individuals  becoming infectious
@@ -32,7 +32,7 @@ muV1 = 0.0002;                       % Death rate competition parameters
 sigmaV = 365.;                       % 1/sigmaV: Susceptibility period in Tsetse
 aH = 365*0.075;                      % Tsetse human biting rate
 aL = 365*0.175;                      % Tsetse Livestock biting rate
-betaVH = 0.065;                      % Tran. prob. from humans to Tsetse
+betaVH = 2.515;                      % Tran. prob. from humans to Tsetse
 betaVL = 0.065;                      % Tran. prob. from Livestock to Tsetse
 tauV = 365./25;                      % 1/tauV: incubation period in tsetse
 V = 5000;                            % Tsetse population size (carrying capacity)
@@ -66,7 +66,14 @@ eps1 = 0.94;                         % Stage I treatment efficacy
 eps2 = 0.965;                        % Stage II treatment efficacy
 p2 = 0.007;                          % Prob of treatment failure mortality in stage II patient
 deltaH = 365./50;                    % 1/deltaH: immune period in  humans after treatment
+zeta1 = 36.5;
+zeta2 = 36.5;
 
+
+%% Vector Treatment Parameters
+rho = 0.0;                           % constrant mortality rate
+l = 0;                               % l months at highest capacity
+m = 0;                               % next m months of linear decline
 
 
 
@@ -89,10 +96,10 @@ tspan = linspace(0,1000,1000) ;        % In years
 
 
 % ODE solver
-[t,y] = ode15s(@HATmodel,tspan, y0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
+[t,y] = ode45(@HATmodel,tspan, y0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
                aL,betaVH,betaVL,tauV,muH,betaH,tauH,nuH,k1,k2,gammaHC,gammaH1,gammaH2, ...
                betaL,tauL,gammaL,deltaL,P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
-               eps2,p2,deltaH,LivStock,alpha);
+               eps2,p2,deltaH,zeta1,zeta2,LivStock,alpha,rho,l,m);
 
 
 

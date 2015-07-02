@@ -1,4 +1,4 @@
-function[HI]  = runHATintervention()
+function[HI]  = runHATmodel()
 
 %% Notes
 %  1. BASE CASE: LivStock and AsymCarrier variable  should be set to
@@ -8,8 +8,6 @@ function[HI]  = runHATintervention()
 %  3. ASYMTOMATIC CARRIERS: For asymptomatic carriers, set
 %     AsymCarrier = 1 and LivStock = 0.
 
-%% Interventions implemented
-% Increasing the treatment rate => More people recovering
 
 %% Animal reservoir
 LivStock = 0;                        % Whether to include Livestock dynamics or not
@@ -35,9 +33,9 @@ sigmaV = 365.;                       % 1/sigmaV: Susceptibility period in Tsetse
 aH = 365*0.075;                      % Tsetse human biting rate
 aL = 365*0.175;                      % Tsetse Livestock biting rate
 betaVH = 2.515;                      % Tran. prob. from humans to Tsetse
-betaVL = 0.0394;                      % Tran. prob. from Livestock to Tsetse
+betaVL = 0.065;                      % Tran. prob. from Livestock to Tsetse
 tauV = 365./25;                      % 1/tauV: incubation period in tsetse
-V = 5000;                            % Tsetse population size (carrying capacity)
+V = 328;                            % Tsetse population size (carrying capacity)
 
 %% Human Parameters (All rates are in years)
 muH = 1/55;                          % Human natural death rate
@@ -59,8 +57,8 @@ L = 50;                              % Livestock population size
 
 %% Human Treatment Parameters
 P1 = 0.68;                           % Prob. a stage I individual gets CATT test
-P1PD = 0.87;                         % Sensitivity of test for stage I patient
-P1TP = 1;                            % Prob. of treatment after testing +ve for stage I patient
+P1PD = 0.87;                         % Sensitivity of test for stage I patientP
+1TP = 1;                            % Prob. of treatment after testing +ve for stage I patient
 P2 = 0.68;                           % Prob. a stage II individual gets CATT test
 P2PD = 0.87;                         % Sensitivity of test for stage II patient
 P2TP = 1;                            % Prob. of treatment after testing +ve for stage II patient
@@ -68,14 +66,15 @@ eps1 = 0.94;                         % Stage I treatment efficacy
 eps2 = 0.965;                        % Stage II treatment efficacy
 p2 = 0.007;                          % Prob of treatment failure mortality in stage II patient
 deltaH = 365./50;                    % 1/deltaH: immune period in  humans after treatment
-zeta1 = 365./10;
-zeta2 = 365./10;
+zeta1 = 36.5;
+zeta2 = 36.5;
 
 
 %% Vector Treatment Parameters
 rho = 0.0;                           % constrant mortality rate
 l = 0;                               % l months at highest capacity
 m = 0;                               % next m months of linear decline
+
 
 
 %% Solve Model
@@ -93,69 +92,14 @@ end
 
 
 % Time span
-tspan = linspace(0,1000,1000) ;        % In years (for asym. case 1000->5000)
+tspan = linspace(0,1000,1000) ;        % In years
 
 
-% ODE solver (run model to equilibrium)
+% ODE solver
 [t,y] = ode45(@HATmodel,tspan, y0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
                aL,betaVH,betaVL,tauV,muH,betaH,tauH,nuH,k1,k2,gammaHC,gammaH1,gammaH2, ...
                betaL,tauL,gammaL,deltaL,P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
                eps2,p2,deltaH,zeta1,zeta2,LivStock,alpha,rho,l,m);
-
-
-%% Running model with Interventions
-ye0 = y(end,:); % Initializing from equilibrium
-intervention = 3;
-
-if intervention == 1  % increased treatment coverage
-    tint = linspace(0,20,20*360); % Running model for 5 years
-                                 % Intervention Parameters
-    P1 = 0.75; % Increased coverage due to active case-finding
-    P2 = 0.75; % Increased coverage due to active case-finding
-    [t,y] = ode45(@HATmodel,tint, ye0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
-                  aL,betaVH,betaVL,tauV,muH,betaH,tauH,nuH,k1,k2,gammaHC,gammaH1,gammaH2, ...
-                  betaL,tauL,gammaL,deltaL,P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
-                  eps2,p2,deltaH,zeta1,zeta2,LivStock,alpha,rho,l,m);
-elseif intervention ==2 % active case finding campaigns every 2
-                        % years
-    t = [];
-    y = [];
-    tint = linspace(0,1,360)
-    for j = 1:20
-        [tl,yl] = ode45(@HATmodel,tint, ye0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
-                  aL,betaVH,betaVL,tauV,muH,betaH,tauH,nuH,k1,k2,gammaHC,gammaH1,gammaH2, ...
-                  betaL,tauL,gammaL,deltaL,P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
-                  eps2,p2,deltaH,zeta1,zeta2,LivStock,alpha,rho,l,m);
-        t = vertcat(t,tl);
-        y = vertcat(y,yl);
-        tint = linspace(tint(end)+10/360,tint(end)+1,1000);
-        ye0  = yl(end,:);
-        ye0(11) = ye0(11)+0.8*ye0(9);
-        ye0(9) = 0.2*ye0(9);
-
-    end
-elseif intervention == 3 %
-    tint = linspace(0,5,5*360)
-    rho = 365*0.01;
-    l = 3;
-    m = 3;
-    [ti,yi] = ode45(@HATmodel,tint, ye0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
-                  aL,betaVH,betaVL,tauV,muH,betaH,tauH,nuH,k1,k2,gammaHC,gammaH1,gammaH2, ...
-                  betaL,tauL,gammaL,deltaL,P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
-                  eps2,p2,deltaH,zeta1,zeta2,LivStock,alpha,rho,l,m);
-
-    tint = linspace(5,20,15*360);
-    ye0 = yi(end,:);
-    rho = 0;
-    [tpi,ypi] = ode45(@HATmodel,tint, ye0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
-                  aL,betaVH,betaVL,tauV,muH,betaH,tauH,nuH,k1,k2,gammaHC,gammaH1,gammaH2, ...
-                  betaL,tauL,gammaL,deltaL,P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
-                  eps2,p2,deltaH,zeta1,zeta2,LivStock,alpha,rho,l,m);
-   t = vertcat(ti,tpi);
-   y = vertcat(yi,ypi)
-end
-
-
 
 
 
@@ -167,6 +111,7 @@ for i = 1:length(Compartments)-(1-LivStock)*4
 end
 
 HI = HI1(end) + HI2(end);
+
 
 close all
 figure;
