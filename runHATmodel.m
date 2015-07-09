@@ -16,7 +16,7 @@ LivStock = 0;                        % Whether to include Livestock dynamics or 
 AsymCarrier = 0;
 if AsymCarrier == 1
     alpha = 1;                       % Switch variable for asym. carr.
-    nuH  = 0.6301;                     % Proportion of individuals becoming infectious.
+    nuH  = 0.6301;                   % Proportion of individuals becoming infectious.
 else
     alpha = 0;                       % Switch variable for asym. carr.
     nuH = 1;                         % Proportion of individuals  becoming infectious
@@ -32,7 +32,7 @@ muV1 = 0.0002;                       % Death rate competition parameters
 sigmaV = 365.;                       % 1/sigmaV: Susceptibility period in Tsetse
 aH = 365*0.075;                      % Tsetse human biting rate
 aL = 365*0.175;                      % Tsetse Livestock biting rate
-betaVH = 0.165;                      % Tran. prob. from humans to Tsetse
+betaVH = 2.515;                      % Tran. prob. from humans to Tsetse
 betaVL = 0.065;                      % Tran. prob. from Livestock to Tsetse
 tauV = 365./25;                      % 1/tauV: incubation period in tsetse
 V = 5000;                            % Tsetse population size (carrying capacity)
@@ -56,10 +56,10 @@ deltaL = 365./50;                    % 1/deltaL: immune period in livestock
 L = 50;                              % Livestock population size
 
 %% Human Treatment Parameters
-P1 = 0;                              % Prob. a stage I individual gets CATT test
+P1 = 0.68;                           % Prob. a stage I individual gets CATT test
 P1PD = 0.87;                         % Sensitivity of test for stage I patient
 P1TP = 1;                            % Prob. of treatment after testing +ve for stage I patient
-P2 = 0.4;                              % Prob. a stage II individual gets CATT test
+P2 = 0.68;                           % Prob. a stage II individual gets CATT test
 P2PD = 0.87;                         % Sensitivity of test for stage II patient
 P2TP = 1;                            % Prob. of treatment after testing +ve for stage II patient
 eps1 = 0.94;                         % Stage I treatment efficacy
@@ -92,7 +92,7 @@ end
 
 
 % Time span
-tspan = linspace(0,1000,1000) ;        % In years
+tspan = linspace(0,1000,1000) ;      % In years
 
 
 % ODE solver
@@ -107,7 +107,7 @@ tspan = linspace(0,1000,1000) ;        % In years
 Compartments = {'VP','VS','VE','VI','VR','HS','HE','HC','HI1','HI2','HR','LS','LE','LI','LR'}
 
 for i = 1:length(Compartments)-(1-LivStock)*4
-    eval([Compartments{i} '= y(:,i)']);
+    eval([Compartments{i} '= y(:,i);'])
 end
 
 HI = HI1(end) + HI2(end);

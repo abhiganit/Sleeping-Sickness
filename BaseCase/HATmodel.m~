@@ -33,6 +33,7 @@ phi1 = P1*P1PD*P1TP;
 phi2 = P2*P2PD*P2TP;
 BH = muH*H + ((1-phi2)*gammaH2 + phi2*(1-eps2)*p2*zeta2)*HI2;
 muV = muV0*(1+muV1*V);
+
 lambdaVH = betaVH*(HI1+k1*HC+k2*HI2)/H;
 
 %% Model equations:
