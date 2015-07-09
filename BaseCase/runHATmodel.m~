@@ -56,10 +56,10 @@ deltaL = 365./50;                    % 1/deltaL: immune period in livestock
 L = 50;                              % Livestock population size
 
 %% Human Treatment Parameters
-P1 = 0.68;                           % Prob. a stage I individual gets CATT test
+P1 = 0.68;                            % Prob. a stage I individual gets CATT test
 P1PD = 0.87;                         % Sensitivity of test for stage I patientP
-1TP = 1;                            % Prob. of treatment after testing +ve for stage I patient
-P2 = 0.68;                           % Prob. a stage II individual gets CATT test
+P1TP = 1;                            % Prob. of treatment after testing +ve for stage I patient
+P2 = 1;                              % Prob. a stage II individual gets CATT test
 P2PD = 0.87;                         % Sensitivity of test for stage II patient
 P2TP = 1;                            % Prob. of treatment after testing +ve for stage II patient
 eps1 = 0.94;                         % Stage I treatment efficacy
@@ -92,7 +92,7 @@ end
 
 
 % Time span
-tspan = linspace(0,1000,1000) ;        % In years
+tspan = linspace(0,500,500) ;        % In years
 
 
 % ODE solver

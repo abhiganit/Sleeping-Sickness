@@ -16,7 +16,7 @@ LivStock = 0;                        % Whether to include Livestock dynamics or 
 AsymCarrier = 0;
 if AsymCarrier == 1
     alpha = 1;                       % Switch variable for asym. carr.
-    nuH  = 0.6301;                     % Proportion of individuals becoming infectious.
+    nuH  = 0.6301;                   % Proportion of individuals becoming infectious.
 else
     alpha = 0;                       % Switch variable for asym. carr.
     nuH = 1;                         % Proportion of individuals  becoming infectious
@@ -35,7 +35,7 @@ aL = 365*0.175;                      % Tsetse Livestock biting rate
 betaVH = 2.515;                      % Tran. prob. from humans to Tsetse
 betaVL = 0.065;                      % Tran. prob. from Livestock to Tsetse
 tauV = 365./25;                      % 1/tauV: incubation period in tsetse
-V = 328;                            % Tsetse population size (carrying capacity)
+V = 5000;                            % Tsetse population size (carrying capacity)
 
 %% Human Parameters (All rates are in years)
 muH = 1/55;                          % Human natural death rate
@@ -57,11 +57,11 @@ L = 50;                              % Livestock population size
 
 %% Human Treatment Parameters
 P1 = 0.68;                           % Prob. a stage I individual gets CATT test
-P1PD = 0.87;                         % Sensitivity of test for stage I patientP
+P1PD = 0.87;                         % Sensitivity of test for stage I patient
 P1TP = 1;                            % Prob. of treatment after testing +ve for stage I patient
-P2 = 1;                              % Prob. a stage II individual gets CATT test
+P2 = 0.68;                           % Prob. a stage II individual gets CATT test
 P2PD = 0.87;                         % Sensitivity of test for stage II patient
-P2TP = 0.87;                         % Prob. of treatment after testing +ve for stage II patient
+P2TP = 1;                            % Prob. of treatment after testing +ve for stage II patient
 eps1 = 0.94;                         % Stage I treatment efficacy
 eps2 = 0.965;                        % Stage II treatment efficacy
 p2 = 0.007;                          % Prob of treatment failure mortality in stage II patient
@@ -92,7 +92,7 @@ end
 
 
 % Time span
-tspan = linspace(0,500,500) ;        % In years
+tspan = linspace(0,1000,1000) ;      % In years
 
 
 % ODE solver
