@@ -1,0 +1,1 @@
+cd ~/Sleeping-Sickness/Basecase; /usr/local/cluster/software/matlab-2014a/bin/matlab -nodisplay -nosplash -r modelfit < /dev/null > MatOutput 2> MatError
