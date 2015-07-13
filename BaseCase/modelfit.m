@@ -2,19 +2,19 @@ function[posterior,params] = modelfit()
 
 %% Bayesian Melding
     tic;
-    N = 100000;
+    N = 8;
     % N samples from priors
     params = zeros(N,3);
-
+    tic
     parfor i = 1:N
         betaVH = 10*rand;
         betaH = 10*rand;
-        zeta2 = 2.28*rand;
+        zeta2 = 1.37*rand;
         params(i,:)  = [betaVH,betaH,zeta2];
 
         [a,b,c] = runHATmodel(params(i,:));
 
-        Likelihood(i) = betapdf(a,5,4307)*betapdf(b,7,4307)*betapdf(c,1,874);
+        Likelihood(i) = betapdf(a,5,4307)*betapdf(b,7,4307)*betapdf(c,10,1634);
     end
     toc
 

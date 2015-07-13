@@ -1,6 +1,6 @@
 function[S1,S2,T]  = runHATmodel(x)
 
-tic;
+%tic;
 
 
 %% Tsetse Parameters (All rates are in years)
@@ -12,14 +12,14 @@ sigmaV = 365.;                       % 1/sigmaV: Susceptibility period in Tsetse
 aH = 365*0.075;                      % Tsetse human biting rate
 betaVH = x(1);                       % Tran. prob. from humans to Tsetse
 tauV = 365./25;                      % 1/tauV: incubation period in tsetse
-V = 328;                             % Tsetse population size (carrying capacity)
+V = 1634;                             % Tsetse population size (carrying capacity)
 
 %% Human Parameters (All rates are in years)
 muH = 1/55;                          % Human natural death rate
 betaH = x(2);                        % Trans. prob. from tsetse to humans
 tauH = 365./12;                      % 1/tauH:incubation period in humans
-gammaH1 = 365*0.0028;                % 1/gammaH1: 1st stage infectious period in humans
-gammaH2 = 365*0.0029;                % 1/gammaH2: 2nd stage infectious period in humans
+gammaH1 = 365*0.0019;                % 1/gammaH1: 1st stage infectious period in humans
+gammaH2 = 365*0.0020;                % 1/gammaH2: 2nd stage infectious period in humans
 H = 300;                             % Human population size
 
 %% Human Treatment Parameters
@@ -47,7 +47,11 @@ m = 0;                               % next m months of linear decline
 %% Solve Model
 
 % Initial conditions
-V0 = [0.01*V,0.99*V, 0, 0.01*V,0];   % (Vp,Vs,Ve,Vi,Vr)
+V0 = [BV*V/eta,0.99*V, 0, 0.01*V,0];   % (Vp,Vs,Ve,Vi,Vr) % Note: I was
+                                  % using 0.01. So, how many
+                                  % offsprings during one female
+                                  % tsetse life.
+
 H0 = [H,0,0,0,0];                  % (Hs,He,Hc,Hi1,Hi2,Hr)
 y0 = horzcat(V0,H0);
 
@@ -167,6 +171,6 @@ T = y(end,4)/sum(y(end,2:5));
 % $$$     box('off')
 % $$$ end
 
-toc
+%toc
 
 end
