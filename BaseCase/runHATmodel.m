@@ -1,12 +1,5 @@
-function[HI]  = runHATmodel()
+function[S1,S2,T]  = runHATmodel(x)
 
-%% Notes
-%  1. BASE CASE: LivStock and AsymCarrier variable  should be set to
-%     zero.
-%  2. ANIMAL RESERVOIR: To explore role of animal reservoir, make
-%     LivStock variable = 1 and AsymCarrier = 0.
-%  3. ASYMTOMATIC CARRIERS: For asymptomatic carriers, set
-%     AsymCarrier = 1 and LivStock = 0.
 tic;
 
 
@@ -17,20 +10,20 @@ muV0 = 365*0.025;                    % Tsetse death rate without competition
 muV1 = 0.0002;                       % Death rate competition parameters
 sigmaV = 365.;                       % 1/sigmaV: Susceptibility period in Tsetse
 aH = 365*0.075;                      % Tsetse human biting rate
-betaVH = 2.515;                      % Tran. prob. from humans to Tsetse
+betaVH = x(1);                       % Tran. prob. from humans to Tsetse
 tauV = 365./25;                      % 1/tauV: incubation period in tsetse
-V = 328;                            % Tsetse population size (carrying capacity)
+V = 328;                             % Tsetse population size (carrying capacity)
 
 %% Human Parameters (All rates are in years)
 muH = 1/55;                          % Human natural death rate
-betaH = 0.62;                        % Trans. prob. from tsetse to humans
+betaH = x(2);                        % Trans. prob. from tsetse to humans
 tauH = 365./12;                      % 1/tauH:incubation period in humans
 gammaH1 = 365*0.0028;                % 1/gammaH1: 1st stage infectious period in humans
 gammaH2 = 365*0.0029;                % 1/gammaH2: 2nd stage infectious period in humans
 H = 300;                             % Human population size
 
 %% Human Treatment Parameters
-P1 = 0.68;                            % Prob. a stage I individual gets CATT test
+P1 = 0.0;                            % Prob. a stage I individual gets CATT test
 P1PD = 0.87;                         % Sensitivity of test for stage I patientP
 P1TP = 1;                            % Prob. of treatment after testing +ve for stage I patient
 P2 = 1;                              % Prob. a stage II individual gets CATT test
@@ -41,7 +34,7 @@ eps2 = 0.965;                        % Stage II treatment efficacy
 p2 = 0.007;                          % Prob of treatment failure mortality in stage II patient
 deltaH = 365./50;                    % 1/deltaH: immune period in  humans after treatment
 zeta1 = 36.5;
-zeta2 = 36.5;
+zeta2 = 1/x(3);
 
 
 %% Vector Treatment Parameters
@@ -70,16 +63,18 @@ tspan = [0,1000];
                P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
                eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
 
-
+S1 = y(end,8)/sum(y(end,6:end));
+S2 = y(end,9)/sum(y(end,6:end));
+T = y(end,4)/sum(y(end,2:5));
 
 %% Plots
-Compartments = {'VP','VS','VE','VI','VR','HS','HE','HI1','HI2','HR'};
-
-for i = 1:length(Compartments);
-    eval([Compartments{i} '= y(:,i);'])
-end
-
-HI = HI1(end) + HI2(end);
+% $$$ Compartments = {'VP','VS','VE','VI','VR','HS','HE','HI1','HI2','HR'};
+% $$$
+% $$$ for i = 1:length(Compartments);
+% $$$     eval([Compartments{i} '= y(:,i);'])
+% $$$ end
+% $$$
+% $$$ HI = HI1(end) + HI2(end);
 
 
 % $$$ close all

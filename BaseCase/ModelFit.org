@@ -61,9 +61,9 @@
 
 
 * Priors
-  | Parameter    | Prior       |
-  |--------------+-------------|
-  | $\beta_{VH}$ | $U(0,\infty)$    |
+  | Parameter    | Prior         |
+  |--------------+---------------|
+  | $\beta_{VH}$ | $U(0,\infty)$ |
   | $\beta_{H}$  | $U(0,\infty)$ |
   | $1/\zeta_2$  | $U(0,\infty)$ |
 
