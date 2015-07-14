@@ -14,7 +14,7 @@ function[] = modelfit3()
 
         [a,b,c] = runHATmodel(params3(i,:));
 
-        Likelihood2(i) = betapdf(a,5,4307)*betapdf(b,7,4307)*betapdf(c,10,1634);
+        Likelihood3(i) = betapdf(a,5,4307)*betapdf(b,7,4307)*betapdf(c,10,1634);
     end
     toc
     save('output3','params3','Likelihood3')
