@@ -1,23 +1,23 @@
-function[] = modelfit()
+function[] = modelfit2()
 
 %% Bayesian Melding
     tic;
     N = 10000;
     % N samples from priors
-    params = zeros(N,3);
+    params2 = zeros(N,3);
     tic
     parfor i = 1:N
         betaVH = 10*rand;
         betaH = 10*rand;
         zeta2 = 1.37*rand;
-        params(i,:)  = [betaVH,betaH,zeta2];
+        params2(i,:)  = [betaVH,betaH,zeta2];
 
-        [a,b,c] = runHATmodel(params(i,:));
+        [a,b,c] = runHATmodel(params2(i,:));
 
-        Likelihood(i) = betapdf(a,5,4307)*betapdf(b,7,4307)*betapdf(c,10,1634);
+        Likelihood2(i) = betapdf(a,5,4307)*betapdf(b,7,4307)*betapdf(c,10,1634);
     end
     toc
-    save('output','params','Likelihood')
+    save('output2','params2','Likelihood2')
 
 %    parfor i = 1:N
  %   weights(i) = Likelihood(i)/sum(Likelihood);
