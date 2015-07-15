@@ -1,8 +1,8 @@
-function[] = modelfit()
+function[] = modelfit1()
 
-%% Sampling.
+%% Bayesian Melding
     tic;
-    N = 5000;
+    N = 10000;
     % N samples from priors
     params = zeros(N,3);
     tic
@@ -17,7 +17,7 @@ function[] = modelfit()
         Likelihood(i) = betapdf(a,5,4307)*betapdf(b,7,4307)*betapdf(c,10,1634);
     end
     toc
-    save('output','params','Likelihood')
+    save('output1','params','Likelihood')
 
 %    parfor i = 1:N
  %   weights(i) = Likelihood(i)/sum(Likelihood);
