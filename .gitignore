@@ -1,0 +1,41 @@
+### Emacs
+
+*~
+\#*\#
+auto/
+
+### LaTeX
+
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+*.lof
+*.nav
+*.snm
+
+### Python
+
+__pycache__/
+*.py[co]
+
+### Compressed files
+
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+### This project
+
+/dengue_CR_supplemental.pdf
+/dengue_CR_main.pdf
+/dengue_CR.html
+/code/finalList.p
+/code/fulloutput.csv
