@@ -1,4 +1,4 @@
-function[] = modelfit()
+function[] = modelfit1()
 
 %% Sampling.
 
@@ -37,6 +37,6 @@ function[] = modelfit()
 
     end
     toc
-    save('output','params','Likelihood')
+    save('output1','params','Likelihood')
 
 end
