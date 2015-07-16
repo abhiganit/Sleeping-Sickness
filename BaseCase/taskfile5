@@ -1,0 +1,1 @@
+cd ~/Sleeping-Sickness/BaseCase; /usr/local/cluster/software/matlab-2014a/bin/matlab -nodisplay -nosplash -r modelfit5  < /dev/null > MatOutput5 2> MatError5

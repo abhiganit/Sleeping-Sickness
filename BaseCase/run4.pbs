@@ -20,7 +20,7 @@ cmd = ['/home/njc2/projects/SimpleQueue/2012/SQDedDriver.py',
        '--maxTasksPerNode=8',
        '--pnwss',
        '--wrapperVerbose',
-       'taskfile']
+       'taskfile4']
 LogI('About to Popen %s.'%cmd)
 
 p = subprocess.Popen(cmd)
