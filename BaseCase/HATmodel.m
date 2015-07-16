@@ -46,8 +46,8 @@ dVI = tauV*VE - (muV+mr)*VI;
 dVR = (aH*(1-lambdaVH)+sigmaV)*VS -(muV+mr)*VR;
 
 % Human Equations
-dHS = BH + deltaH*HR - aH*betaH*VI*HS/H - muH*HS;
-dHE = aH*betaH*VI*HS/H - (tauH+muH)*HE;
+dHS = BH + deltaH*HR - aH*betaVH*betaH*VI*HS/H - muH*HS;
+dHE = aH*betaVH*betaH*VI*HS/H - (tauH+muH)*HE;
 dHI1 = tauH*HE  -(phi1*eps1*zeta1 +(1-phi1)*gammaH1 + muH)*HI1;
 dHI2 = (1-phi1)*gammaH1*HI1 - (phi2*eps2*zeta2  + (1-phi2)*gammaH2 + phi2*(1-eps2)*p2*zeta2 + muH)*HI2;
 dHR = phi1*eps1*zeta1*HI1 + phi2*eps2*zeta2*HI2 -(deltaH+muH)*HR;

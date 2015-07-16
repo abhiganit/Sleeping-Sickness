@@ -1,9 +1,11 @@
+
 #+OPTIONS:   H:4 toc:t num:2
 #+PROPERTY:  padline no
 #+SETUPFILE: ../bigblow-pirilampo.setup
 #+LATEX_HEADER:\usepackage{amsmath}
 #+LATEX_HEADER: \newcommand{\md}{\mathrm{d}}
 #+TITLE: Model Fit
+
 
 
 
@@ -66,5 +68,6 @@
   | $\beta_{VH}$ | $U(0,\infty)$ |
   | $\beta_{H}$  | $U(0,\infty)$ |
   | $1/\zeta_2$  | $U(0,\infty)$ |
+
 
 * Likelihood
