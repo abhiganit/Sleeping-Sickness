@@ -71,75 +71,75 @@ S1 = y(end,8)/sum(y(end,6:end));
 S2 = y(end,9)/sum(y(end,6:end));
 T = y(end,4)/sum(y(end,2:5));
 
-%% Plots
-% $$$ Compartments = {'VP','VS','VE','VI','VR','HS','HE','HI1','HI2','HR'};
-% $$$
-% $$$ for i = 1:length(Compartments);
-% $$$     eval([Compartments{i} '= y(:,i);'])
-% $$$ end
-% $$$
-% $$$ HI = HI1(end) + HI2(end);
+% %% Plots
+% Compartments = {'VP','VS','VE','VI','VR','HS','HE','HI1','HI2','HR'};
+% % $$$
+% for i = 1:length(Compartments);
+%     eval([Compartments{i} '= y(:,i);'])
+% end
+% % $$$
+% HI = HI1(end) + HI2(end);
 
 
-% $$$ close all
-% $$$ figure;
-% $$$ subplot(2,2,1)
-% $$$ plot(t,VP,'g',t,VS,'linewidth',2);
-% $$$ xlim([0,0.02]);
-% $$$ title('V_P & V_S')
-% $$$ xlabel('Years')
-% $$$ ylabel('No. of tsetse')
-% $$$ legend('V_P','V_S')
-% $$$ legend('boxoff','southeast')
-% $$$ box('off')
-% $$$ subplot(2,2,2)
-% $$$ plot(t, VE,'m','linewidth',2);
-% $$$ xlim([0,1]);
-% $$$ title('V_E')
-% $$$ xlabel('Years')
-% $$$ box('off')
-% $$$ subplot(2,2,3)
-% $$$ plot(t, VI,'r','linewidth',2);
-% $$$ xlim([0,1]);
-% $$$ title('V_I')
-% $$$ xlabel('Years')
-% $$$ ylabel('No. of tsetse')
-% $$$ box('off')
-% $$$ subplot(2,2,4)
-% $$$ plot(t , VR,'c','linewidth',2);
-% $$$ xlim([0,1]);
-% $$$ title('V_R')
-% $$$ xlabel('Years')
-% $$$ box('off')
-% $$$
-% $$$ figure;
-% $$$ subplot(2,2,1)
-% $$$ plot(t,HS, 'g','linewidth',2);
-% $$$ xlim([0,80]);
-% $$$ xlabel('Years')
-% $$$ ylabel('No. of people')
-% $$$ title('H_S')
-% $$$ box('off')
-% $$$ subplot(2,2,2)
-% $$$ plot(t,HE, 'm','linewidth',2);
-% $$$ xlim([0,80]);
-% $$$ title('H_E')
-% $$$ box('off')
-% $$$ subplot(2,2,3)
-% $$$ plot(t,HC,'k',t, HI1,'r',t,HI2, 'linewidth',2);
-% $$$ xlabel('Years')
-% $$$ ylabel('No. of people')
-% $$$ xlim([0,80]);
-% $$$ title('H_C, H_{I_1} & H_{I_2}')
-% $$$ legend('H_C','H_{I_1}','H_{I_2}')
-% $$$ legend('boxoff','southeast')
-% $$$ box('off')
-% $$$ subplot(2,2,4)
-% $$$ plot(t,HR,'c','linewidth',2);
-% $$$ title('H_{R}')
-% $$$ xlim([0,80]);
-% $$$ xlabel('Years')
-% $$$ box('off')
+% close all
+% figure;
+% subplot(2,2,1)
+% plot(t,VP,'g',t,VS,'linewidth',2);
+% %xlim([0,0.02]);
+% title('V_P & V_S')
+% xlabel('Years')
+% ylabel('No. of tsetse')
+% legend('V_P','V_S')
+% legend('boxoff','southeast')
+% box('off')
+% subplot(2,2,2)
+% plot(t, VE,'m','linewidth',2);
+% %xlim([0,1]);
+% title('V_E')
+% xlabel('Years')
+% box('off')
+% subplot(2,2,3)
+% plot(t, VI,'r','linewidth',2);
+% %xlim([0,1]);
+% title('V_I')
+% xlabel('Years')
+% ylabel('No. of tsetse')
+% box('off')
+% subplot(2,2,4)
+% plot(t , VR,'c','linewidth',2);
+% %xlim([0,1]);
+% title('V_R')
+% xlabel('Years')
+% box('off')
+% % $$$
+% figure;
+% subplot(2,2,1)
+% plot(t,HS, 'g','linewidth',2);
+% %xlim([0,80]);
+% xlabel('Years')
+% ylabel('No. of people')
+% title('H_S')
+% box('off')
+% subplot(2,2,2)
+% plot(t,HE, 'm','linewidth',2);
+% %xlim([0,80]);
+% title('H_E')
+% box('off')
+% subplot(2,2,3)
+% plot(t, HI1,'r',t,HI2, 'linewidth',2);
+% xlabel('Years')
+% ylabel('No. of people')
+% %xlim([0,80]);
+% title('H_C, H_{I_1} & H_{I_2}')
+% legend('H_C','H_{I_1}','H_{I_2}')
+% legend('boxoff','southeast')
+% box('off')
+% subplot(2,2,4)
+% plot(t,HR,'c','linewidth',2);
+% title('H_{R}')
+% %xlim([0,80]);
+% xlabel('Years')
+% box('off')
 % $$$
 % $$$ if LivStock ==1
 % $$$     figure;

@@ -1,45 +1,42 @@
 function[] = modelfit()
 
 %% Sampling.
+
     tic;
-    N = 5000;
+
+    X = betarnd(5,4307,10000,1);
+    Y = betarnd(7,4307,10000,1);
+
+    ci1 = quantile(X,[0.025,0.975])
+    ci2 = quantile(Y,[0.025,0.975])
+
+
+    N = 6000;
     % N samples from priors
     params = zeros(N,3);
     tic
     parfor i = 1:N
-        betaVH = 10*rand;
-        betaH = 10*rand;
-        zeta2 = 1.37*rand;
-        params(i,:)  = [betaVH,betaH,zeta2];
+        betaVH = 0.1+0.5*rand;
+        betaH = rand;
+        zeta = 1.37*rand;
+        params(i,:)  = [betaVH,betaH,zeta];
+
 
         [a,b,c] = runHATmodel(params(i,:));
 
-        Likelihood(i) = betapdf(a,5,4307)*betapdf(b,7,4307)*betapdf(c,10,1634);
+        A = betapdf(a,5,4307);
+        B = betapdf(b,7,4307);
+        C = betapdf(c,10,1634);
+
+        if (A<=ci1(1)) && (A>=ci1(2)) || (B<=ci2(1)) && (B>=ci2(2)) || C > 0.01
+            Likelihood = 0;
+        else
+            Likelihood = A*B*C;
+        end
+
+
     end
     toc
     save('output','params','Likelihood')
 
-%    parfor i = 1:N
- %   weights(i) = Likelihood(i)/sum(Likelihood);
-
-  %  end
-
-   % weight = weight(weight~=0);
-    %params = params(weight~=0,:);
-
-    % {nter1 = Desired number of sample for poserior
-     %  k1 = 1 ;
-
-    %}
-
-   % total = 500;
-    %j = 1;
-   % while j < total
-    % k =randi(length(weight),1);
-
-    % if(rand <weight(k))
-    % Par =params(k,:);
-     % posterior(j,:)=Par;
-     % j = j+1
-    % end
 end
