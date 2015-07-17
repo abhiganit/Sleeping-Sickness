@@ -29,9 +29,9 @@ function[] = modelfit3()
         C = betapdf(c,10,1634);
 
         if (A<=ci1(1)) && (A>=ci1(2)) || (B<=ci2(1)) && (B>=ci2(2)) || C > 0.01
-            Likelihood = 0;
+			 Likelihood(i) = 0;
         else
-            Likelihood = A*B*C;
+	  Likelihood(i) = A*B*C;
         end
 
 
