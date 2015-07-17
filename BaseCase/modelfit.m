@@ -1,5 +1,4 @@
 function[] = modelfit()
-
 %% Sampling.
 
     tic;
@@ -11,7 +10,7 @@ function[] = modelfit()
     ci2 = quantile(Y,[0.025,0.975])
 
 
-    N = 10000;
+    N = 15000;
     % N samples from priors
     params = zeros(N,3);
     tic
@@ -28,7 +27,7 @@ function[] = modelfit()
         B = betapdf(b,7,4307);
         C = betapdf(c,10,1634);
 
-        if (A<=ci1(1)) && (A>=ci1(2)) || (B<=ci2(1)) && (B>=ci2(2)) || C > 0.01
+        if (a<=ci1(1)) || (a>=ci1(2)) || (b<=ci2(1)) || (b>=ci2(2)) || c > 0.0105
 			 Likelihood(i) = 0;
         else
 	  Likelihood(i) = A*B*C;
