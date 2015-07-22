@@ -1,7 +1,6 @@
 
 #+OPTIONS:   H:4 toc:t num:2
 #+PROPERTY:  padline no
-#+SETUPFILE: ../bigblow-pirilampo.setup
 #+LATEX_HEADER:\usepackage{amsmath}
 #+LATEX_HEADER: \newcommand{\md}{\mathrm{d}}
 #+TITLE: Model Fit

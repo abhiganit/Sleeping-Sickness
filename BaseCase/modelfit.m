@@ -10,7 +10,7 @@ function[] = modelfit()
     ci2 = quantile(Y,[0.025,0.975])
 
 
-    N = 15000;
+    N = 200000;
     % N samples from priors
     params = zeros(N,3);
     tic

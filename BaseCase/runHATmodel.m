@@ -62,7 +62,7 @@ y0 = horzcat(V0,H0);
 tspan = [0,1000];
 
 % ODE solver
-[t,y] = ode45(@HATmodel,tspan, y0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
+[t,y] = ode23s(@HATmodel,tspan, y0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
                betaVH,tauV,muH,betaH,tauH,gammaH1,gammaH2, ...
                P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
                eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
@@ -71,7 +71,7 @@ S1 = y(end,8)/sum(y(end,6:end));
 S2 = y(end,9)/sum(y(end,6:end));
 T = y(end,4)/sum(y(end,2:5));
 
-% %% Plots
+%% Plots
 % Compartments = {'VP','VS','VE','VI','VR','HS','HE','HI1','HI2','HR'};
 % % $$$
 % for i = 1:length(Compartments);
@@ -130,8 +130,8 @@ T = y(end,4)/sum(y(end,2:5));
 % xlabel('Years')
 % ylabel('No. of people')
 % %xlim([0,80]);
-% title('H_C, H_{I_1} & H_{I_2}')
-% legend('H_C','H_{I_1}','H_{I_2}')
+% title(' H_{I_1} & H_{I_2}')
+% legend('H_{I_1}','H_{I_2}')
 % legend('boxoff','southeast')
 % box('off')
 % subplot(2,2,4)
