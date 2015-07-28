@@ -19,27 +19,9 @@ end
 nonzeroind  = find(Lik ~=0);
 SampleSize = length(nonzeroind)
 parfor i = 1:length(nonzeroind)
-    [a,b,c] = runHATmodel(Par(nonzeroind(i),:));
-    A(i) = a;
-    B(i) = b;
-    C(i) = c;
+    [a,b,c,d,e,f,g,h,k] = runHATmodel(Par(nonzeroind(i),:));
+    A(i,:) = [a,b,c,d,e,f,g,h,k]
 end
-
-X = betarnd(5,4307,10000,1);
-Y = betarnd(7,4307,10000,1);
-
-ci1 = quantile(X,[0.025,0.975])
-ci2 = quantile(Y,[0.025,0.975])
-
-t = 1:SampleSize;
-t0 = [1,SampleSize]
-figure;
-subplot(3,1,1)
-plot(t,A,'ro',t0,[ci1(1),ci1(1)],'b',t0,[ci1(2),ci1(2)],'b')
-subplot(3,1,2)
-plot(t,B,'ro',t0,[ci2(1),ci2(1)],'b',t0,[ci2(2),ci2(2)],'b')
-subplot(3,1,3)
-plot(t,C,'ro',t0,[0.0105,0.0105],'b')
 
 weights = weights(weights~=0);
 Par  = Par(weights~=0,:);

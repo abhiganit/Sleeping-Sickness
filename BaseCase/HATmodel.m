@@ -29,7 +29,12 @@ else
 end
 
 % Composite parameters
-phi1 = P1*P1PD*P1TP;
+if P1 == 2
+    P1 = coverage(t);
+end
+
+
+phi1 = coverage(t)*P1*P1PD*P1TP;
 phi2 = P2*P2PD*P2TP;
 BH = muH*H + ((1-phi2)*gammaH2 + phi2*(1-eps2)*p2*zeta2)*HI2;
 muV = muV0*(1+muV1*V);

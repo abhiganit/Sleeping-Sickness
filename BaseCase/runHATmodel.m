@@ -1,4 +1,4 @@
-function[S1,S2,T]  = runHATmodel(x)
+function[S1,S2,T,ST1,ST2,SV01,SV02,SV11,SV12]  = runHATmodel(x)
 
 %tic;
 
@@ -33,7 +33,7 @@ eps1 = 0.94;                         % Stage I treatment efficacy
 eps2 = 0.965;                        % Stage II treatment efficacy
 p2 = 0.007;                          % Prob of treatment failure mortality in stage II patient
 deltaH = 365./50;                    % 1/deltaH: immune period in  humans after treatment
-zeta1 = 36.5;
+zeta1 = 1/1 ;
 zeta2 = 1/x(3);
 
 
@@ -41,7 +41,6 @@ zeta2 = 1/x(3);
 rho = 0.0;                           % constrant mortality rate
 l = 0;                               % l months at highest capacity
 m = 0;                               % next m months of linear decline
-
 
 
 %% Solve Model
@@ -70,6 +69,38 @@ tspan = [0,1000];
 S1 = y(end,8)/sum(y(end,6:end));
 S2 = y(end,9)/sum(y(end,6:end));
 T = y(end,4)/sum(y(end,2:5));
+
+% 2008-2009 --> 2010
+y01 = y(end,:);
+tspan1 = linspace(0,1,2); % 2008,09,10,11,12,13
+zeta2 = 1/1;
+P1 = x(4);
+[t1,y1] = ode23s(@HATmodel,tspan1, y01, [], eta,BV,muV0,muV1,sigmaV,aH, ...
+               betaVH,tauV,muH,betaH,tauH,gammaH1,gammaH2, ...
+               P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
+               eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
+
+ST1 = y(end,8)/sum(y(end,6:end));
+ST2 = y(end,9)/sum(y(end,6:end));
+
+% 2010-2011 --> 2012 & 2013
+y02 = y1(end,:);
+tspan2 = linspace(0,2,3); % 2008,09,10,11,12,13
+rho = x(5);
+l = 3;
+m = 3;
+[t2,y2] = ode23s(@HATmodel,tspan2, y02, [], eta,BV,muV0,muV1,sigmaV,aH, ...
+               betaVH,tauV,muH,betaH,tauH,gammaH1,gammaH2, ...
+               P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
+               eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
+
+SV01 = y(end-1,8)/sum(y(end-1,6:end));
+SV02 = y(end-1,9)/sum(y(end-1,6:end));
+SV11 = y(end,8)/sum(y(end,6:end));
+SV12 = y(end,9)/sum(y(end,6:end));
+
+
+
 
 %% Plots
 % Compartments = {'VP','VS','VE','VI','VR','HS','HE','HI1','HI2','HR'};
