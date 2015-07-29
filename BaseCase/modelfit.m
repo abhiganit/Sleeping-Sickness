@@ -1,52 +1,51 @@
-
 function[] = modelfit()
 %% Sampling.
 
     tic;
 
+    % Data & Sample: Years(2008/10/12/13). Columns:  Stage 1 | Stage 2
+    % | Vector Prevalence
+
+    Data = [3,2,9.53;
+            4,8, 0  ;
+            7,13,0  ;
+            3,4, 0 ];
+    SampSize = [1488,1488,1634;
+                4514,4514,0;
+                7708,7708,0;
+                7788,7788,0];
+
     X = betarnd(3,1488,10000,1);
     Y = betarnd(2,1488,10000,1);
-
     ci1 = quantile(X,[0.025,0.975])
     ci2 = quantile(Y,[0.025,0.975])
 
 
-    N = 50000;
+
+    N = 100000;
     % N samples from priors
-    params = zeros(N,5);
+    params = zeros(N,4);
     tic
-    parfor i = 1:N
+    parfor j = 1:N
         betaVH = 0.1+0.5*rand;
         betaH = rand;
         zeta = 1.37*rand;
-        P1 = rand;
         rho = 365*0.15*rand;
 
-        params(i,:)  = [betaVH,betaH,zeta,P1,rho];
+        params(j,:)  = [betaVH,betaH,zeta,rho];
 
+        out = runHATmodel(params(j,:));
 
-        [S1,S2,T,ST1,ST2,SV01,SV02,SV11,SV12] = ...
-            runHATmodel(params(i,:));
-        %        [S1,S2,T] = runHATmodel(params(i,:));
-
-        A = betapdf(S1,3,1488);
-        B = betapdf(S2,2,1488);
-        C = betapdf(T,9.53,1634);
-        %        C = betapdf(T,460,50000);
-        D = betapdf(ST1,4,4514);
-        E = betapdf(ST2,8,4514);
-        F = betapdf(SV01,7,7708);
-        G = betapdf(SV02,13,7708);
-        H = betapdf(SV11,3,7788);
-        I = betapdf(SV12,4,7788);
-
-        if (S1<=ci1(1)) || (S1>=ci1(2)) || (S2<=ci2(1)) || (S2>=ci2(2)) || T > 0.010
-	  Likelihood(i) = 0;
+        if (out(1)<=ci1(1)) || (out(1)>=ci1(2)) || (out(5)<=ci2(1)) || (out(5)>=ci2(2)) || out(9) > 0.010
+	  Likelihood(j) = 0;
         else
-	  Likelihood(i) = A*B*C*D*E*F*G*H*I;
+            Lik1 = 1; Lik2 = 1;
+            for i = 1:4
+                Lik1 = betapdf(out(i),Data(i,1),SampSize(i,1));
+                Lik2 = betapdf(out(i+4),Data(i,2),SampSize(i,2));
+            end
+            Likelihood(j) = Lik1*Lik2*betapdf(out(9),Data(1,3),SampSize(1,3));
         end
-
-
     end
     toc
     save('output','params','Likelihood')
