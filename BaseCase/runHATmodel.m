@@ -70,7 +70,8 @@ V = y(end,4)/sum(y(end,2:5));       % 2008
 % In year 2008, there was active surveillance in Boffa East
 % mainland with 0.7811*0.87 (attendance*sensitivity)
 y01 = y(end,:);
-cov = 0.1026*0.87;
+%cov = 0.1026*0.87;
+cov = x(4)*0.87;
 y01(10) = y01(10) + cov*(y01(8)+y01(9));
 y01(8) = (1-cov)*y01(8); y01(9) = (1-cov)*y01(9);
 tspan1 = linspace(0,2,3);  % (2008-2010) Run from dec 2007 (0), dec (2008) (1),
@@ -85,7 +86,8 @@ T(2) =(y1(end,8)+ y1(end,9))/sum(y1(end,6:end)); % 2010
 
 % (2010-2012)
 y02 = y1(end,:);
-cov = 0.3119*0.87;
+%cov = 0.3119*0.87;
+cov = x(5)*0.87;
 y02(10) = y02(10) + cov*(y02(8)+y02(9));
 y02(8) = (1-cov)*y02(8); y02(9) = (1-cov)*y02(9);
 tspan2 = linspace(0,2,3); % (2010-2012): Run from dec (2009) (0) to dec (2010) (1) to dec
@@ -99,12 +101,13 @@ S1(3) = y2(end,8)/(y2(end,8)+y2(end,9)); % 2012
 T(3) = (y2(end,8)+y2(end,9))/sum(y2(end,6:end)); % 2012
 
 % year 2012
-rho = x(4);
+rho = x(7);
 l = 3; m = 3;
 
 % End of 2011 (beg. 2012)
 y03 = y2(end,:);
-cov = 0.534*0.87;
+%cov = 0.534*0.87;
+cov = x(6)*0.87;
 y03(10) = y03(10) + cov*(y03(8)+y03(9));
 y03(8) = (1-cov)*y03(8); y03(9) = (1-cov)*y03(9);
 
