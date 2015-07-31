@@ -6,51 +6,45 @@ function[] = modelfit()
     % Data & Sample: Years(2008/10/12/13). Columns:  Stage 1 | Stage 2
     % Vector Prevalence
 
-    Data = [3,5,9.53;
-            4,12, 0  ;
-            7,21,0  ;
+    Data = [7,21,9.53  ;
             3,7, 0 ];
-    SampSize = [5,1488,1634;
-                12,4514,0;
-                21,7708,0;
+    SampSize = [21,7708,1634;
                 7,7788,0];
 
-    X = betarnd(3,5,10000,1);
-    Y = betarnd(5,1488,10000,1);
+    X = betarnd(7,21,10000,1);
+    Y = betarnd(21,7708,10000,1);
     ci1 = quantile(X,[0.025,0.975]) % S1, 2008
     ci2 = quantile(Y,[0.025,0.975]) % S2, 2008
 
 
-    N = 40000;
+    N = 10000;
     % N samples from priors
-    params = zeros(N,7);
+    params = zeros(N,4);
     tic
     parfor j = 1:N
         betaVH = 0.1+0.5*rand;
         betaH = rand;
         zeta = 1.37*rand;
-        cov1 = rand;
-        cov2 = rand;
-        cov3 = rand;
+        %        cov1 = rand;
         rho = 365*0.25*rand;
 
-        params(j,:)  = [betaVH,betaH,zeta,cov1,cov2,cov3,rho];
+        params(j,:)  = [betaVH,betaH,zeta,rho];
 
         out = runHATmodel(params(j,:));
 
-        if (out(1)<=ci1(1)) || (out(1)>=ci1(2)) || (out(5)<=ci2(1)) ...
-                    || (out(5)>=ci2(2)) || out(9) > 0.010
+        if (out(1)<=ci1(1)) || (out(1)>=ci1(2)) || (out(3)<=ci2(1)) ...
+                    || (out(3)>=ci2(2)) || out(5) > 0.010
             Likelihood(j) = 0;
         else
             Lik1 = 1; Lik2 = 1;
-            for i = 1:4
+            for i = 1:2
                 Lik1 = betapdf(out(i),Data(i,1),SampSize(i,1));
-                Lik2 = betapdf(out(i+4),Data(i,2),SampSize(i,2));
+                Lik2 = betapdf(out(i+2),Data(i,2),SampSize(i,2));
             end
-            Likelihood(j) = Lik1*Lik2*betapdf(out(9),Data(1,3),SampSize(1,3));
+            Likelihood(j) = Lik1*Lik2*betapdf(out(5),Data(1,3),SampSize(1,3));
         end
     end
     toc
-    save('output1','params','Likelihood')
+    save('output','params','Likelihood')
 
 end
