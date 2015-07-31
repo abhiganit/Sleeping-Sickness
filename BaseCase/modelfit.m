@@ -6,22 +6,22 @@ function[] = modelfit()
     % Data & Sample: Years(2008/10/12/13). Columns:  Stage 1 | Stage 2
     % Vector Prevalence
 
-    Data = [3,5,9.53;
-            4,12, 0  ;
-            7,21,0  ;
-            3,7, 0 ];
-    SampSize = [5,1488,1634;
-                12,4514,0;
-                21,7708,0;
-                7,7788,0];
+    Data = [3,2,9.53;
+            4,8, 0  ;
+            7,13,0  ;
+            3,4, 0 ];
+    SampSize = [1488,1488,1634;
+                4514,4514,0;
+                7708,7708,0;
+                7788,7788,0];
 
-    X = betarnd(3,5,10000,1);
-    Y = betarnd(5,1488,10000,1);
+    X = betarnd(3,1488,10000,1);
+    Y = betarnd(2,1488,10000,1);
     ci1 = quantile(X,[0.025,0.975]) % S1, 2008
     ci2 = quantile(Y,[0.025,0.975]) % S2, 2008
 
 
-    N = 40000;
+    N = 10000;
     % N samples from priors
     params = zeros(N,7);
     tic
@@ -51,6 +51,6 @@ function[] = modelfit()
         end
     end
     toc
-    save('output1','params','Likelihood')
+    save('output','params','Likelihood')
 
 end

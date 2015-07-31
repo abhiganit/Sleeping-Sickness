@@ -63,8 +63,9 @@ tspan = [0,1000];
                P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
                eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
 
-S1(1) = y(end,8)/(y(end,8)+y(end,9)); % 2008
-T(1) = (y(end,8)+y(end,9))/sum(y(end,6:end)); % 2008
+
+S1(1) = (y(end,8))/sum(y(end,6:end)); % 2008
+S2(1) = (y(end,9))/sum(y(end,6:end)); % 2008
 V = y(end,4)/sum(y(end,2:5));       % 2008
 
 % In year 2008, there was active surveillance in Boffa East
@@ -81,8 +82,9 @@ tspan1 = linspace(0,2,3);  % (2008-2010) Run from dec 2007 (0), dec (2008) (1),
                P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
                eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
 
-S1(2) = y1(end,8)/(y1(end,8)+ y1(end,9)); % 2010
-T(2) =(y1(end,8)+ y1(end,9))/sum(y1(end,6:end)); % 2010
+
+S1(2) =(y1(end,8))/sum(y1(end,6:end)); % 2010
+S2(2) =( y1(end,9))/sum(y1(end,6:end)); % 2010
 
 % (2010-2012)
 y02 = y1(end,:);
@@ -97,8 +99,8 @@ tspan2 = linspace(0,2,3); % (2010-2012): Run from dec (2009) (0) to dec (2010) (
                P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
                eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
 
-S1(3) = y2(end,8)/(y2(end,8)+y2(end,9)); % 2012
-T(3) = (y2(end,8)+y2(end,9))/sum(y2(end,6:end)); % 2012
+S1(3) = (y2(end,8))/sum(y2(end,6:end)); % 2012
+S2(3) = (y2(end,9))/sum(y2(end,6:end)); % 2012
 
 % year 2012
 rho = x(7);
@@ -117,8 +119,8 @@ tspan3 = linspace(0,1,2); % (2012): Run from dec (2011) (0) to dec (2012) (1)
                P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
                eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
 
-S1(4) = y3(end,8)/(y3(end,8)+y3(end,9)); % 2013
-T(4) = (y3(end,8)+y3(end,9))/sum(y3(end,6:end)); % 2013
+S1(4) = (y3(end,8))/sum(y3(end,6:end)); % 2013
+S2(4) = (y3(end,9))/sum(y3(end,6:end)); % 2013
 
 
 
@@ -135,7 +137,7 @@ T(4) = (y3(end,8)+y3(end,9))/sum(y3(end,6:end)); % 2013
 %                eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
 
 
-out = horzcat(S1,T,V);
+out = horzcat(S1,S2,V);
 
 
 %% Plots

@@ -1,6 +1,6 @@
 Par = [];
 Lik = [];
-N = 2  % No of independent sample runs that I ran
+N = 10  % No of independent sample runs that I ran
 for i = 1:N
     filename = sprintf('Sample%d.mat',i);
     load(filename)
@@ -14,14 +14,14 @@ end
 
 M = length(Lik) % Total sample size
 
-Data = [3,5,9.53;
-            4,12, 0  ;
-            7,21,0  ;
-            3,7, 0 ];
-SampSize = [5,1488,1634;
-                12,4514,0;
-                21,7708,0;
-                7,7788,0];
+Data = [3,2,9.53;
+        4,8, 0  ;
+        7,13,0  ;
+        3,4, 0 ];
+SampSize = [1488,1488,1634;
+            4514,4514,0;
+            7708,7708,0;
+            7788,7788,0];
 
 bnds1 = []; bnds2 = [];
 for i = 1:4
@@ -59,7 +59,7 @@ fig1 = figure;
 subplot(1,2,1)
 plot(t,A(:,1:4));
 hold on;
-plot(t,A(b,1:4),'k','linewidth',2);
+%plot(t,A(b,1:4),'k','linewidth',2);
 errorbar(t,Data(:,1)./SampSize(:,1), bnds1(:,1),bnds1(:,2),'ko','linewidth',2)
 hold off;
 title('Stage I ratio')
@@ -69,7 +69,7 @@ ax.XTickLabel = {'2008', '2010','2012',' 2013'}
 subplot(1,2,2)
 plot(t,A(:,5:8));
 hold on;
-plot(t,A(b,5:8),'k','linewidth',2);
+%plot(t,A(b,5:8),'k','linewidth',2);
 errorbar(t,Data(:,2)./SampSize(:,2), bnds2(:,1),bnds2(:,2),'ko','linewidth',2)
 hold off;
 title('HAT')
