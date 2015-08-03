@@ -1,16 +1,16 @@
-Par = [];
-Lik = [];
-N = 10  % No of independent sample runs that I ran
-for i = 1:N
-    filename = sprintf('Sample%d.mat',i);
-    load(filename)
-    Par = vertcat(Par,params);
-    Lik = horzcat(Lik,Likelihood);
-end
+% Par = [];
+% Lik = [];
+% N = 10  % No of independent sample runs that I ran
+% for i = 1:N
+%     filename = sprintf('Sample%d.mat',i);
+%     load(filename)
+%     Par = vertcat(Par,params);
+%     Lik = horzcat(Lik,Likelihood);
+% end
 
-% load output
-% Lik = Likelihood;
-% Par = params;
+load output
+Lik = Likelihood;
+Par = params;
 
 M = length(Lik) % Total sample size
 
@@ -82,24 +82,24 @@ plot(A(:,9))
 title('Vector Prevalence (2008)')
 
 
-% % Posterior
-% total = 500;
+% Posterior
+total = 500;
 
-% j = 1;
-% while j < total
-%     k =randi(length(weights),1);
-%     if(rand <weights(k))
-%     param = Par(k,:);
-%     posterior(j,:)=param;
-%      j = j+1;
-%     end
-% end
+j = 1;
+while j < total
+    k =randi(length(weights),1);
+    if(rand <weights(k))
+    param = Par(k,:);
+    posterior(j,:)=param;
+     j = j+1;
+    end
+end
 
 
-% % Plot posterior
+% Plot posterior
 
-% fig3 = figure;
-% for i = 1:4
-%     subplot(2,2,i)
-%     hist(posterior(:,i),20)
-% end
+fig3 = figure;
+for i = 1:4
+    subplot(2,2,i)
+    hist(posterior(:,i),20)
+end

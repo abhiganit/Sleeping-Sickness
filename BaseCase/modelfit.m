@@ -21,20 +21,20 @@ function[] = modelfit()
     ci2 = quantile(Y,[0.025,0.975]) % S2, 2008
 
 
-    N = 10000;
+    N = 200000;
     % N samples from priors
-    params = zeros(N,7);
+    params = zeros(N,4);
     tic
     parfor j = 1:N
         betaVH = 0.1+0.5*rand;
         betaH = rand;
         zeta = 1.37*rand;
-        cov1 = rand;
-        cov2 = rand;
-        cov3 = rand;
+        %        cov1 = rand;
+        %        cov2 = rand;
+        %        cov3 = rand;
         rho = 365*0.25*rand;
 
-        params(j,:)  = [betaVH,betaH,zeta,cov1,cov2,cov3,rho];
+        params(j,:)  = [betaVH,betaH,zeta,rho];
 
         out = runHATmodel(params(j,:));
 
@@ -51,6 +51,6 @@ function[] = modelfit()
         end
     end
     toc
-    save('output','params','Likelihood')
+    save('output1','params','Likelihood')
 
 end
