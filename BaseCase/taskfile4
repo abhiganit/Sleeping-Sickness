@@ -1,1 +1,0 @@
-cd ~/Sleeping-Sickness/BaseCase; /usr/local/cluster/software/matlab-2014a/bin/matlab -nodisplay -nosplash -r modelfit4  < /dev/null > MatOutput4 2> MatError4

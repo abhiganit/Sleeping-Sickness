@@ -45,17 +45,11 @@ m = 0;                               % next m months of linear decline
 %% Solve Model
 
 % Initial conditions
-V0 = [BV*V/eta,0.99*V, 0, 0.01*V,0];   % (Vp,Vs,Ve,Vi,Vr) % Note: I was
-                                  % using 0.01. So, how many
-                                  % offsprings during one female
-                                  % tsetse life.
-
+V0 = [BV*V/eta,0.99*V, 0, 0.01*V,0];   % (Vp,Vs,Ve,Vi,Vr)
 H0 = [H,0,0,0,0];                  % (Hs,He,Hc,Hi1,Hi2,Hr)
 y0 = horzcat(V0,H0);
 
-
 % Time span
-%tspan = linspace(0,1000,1000) ;        % In years
 tspan = [0,1000];
 % ODE solver (solve model to equilibrium)
 [t,y] = ode23s(@HATmodel,tspan, y0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
@@ -69,12 +63,12 @@ S2(1) = (y(end,9))/sum(y(end,6:end)); % 2008
 V = y(end,4)/sum(y(end,2:5));       % 2008
 
 % In year 2008, there was active surveillance in Boffa East
-% mainland with 0.7811*0.87 (attendance*sensitivity)
+% mainland with  coverage= (attendance*sensitivity)
 y01 = y(end,:);
 cov = 0.1026*0.87;
-%cov = x(4)*0.87;
 y01(10) = y01(10) + cov*(y01(8)+y01(9));
 y01(8) = (1-cov)*y01(8); y01(9) = (1-cov)*y01(9);
+
 tspan1 = linspace(0,2,3);  % (2008-2010) Run from dec 2007 (0), dec (2008) (1),
                            % dec (2009) (2)
 [t1,y1] = ode23s(@HATmodel,tspan1, y01, [], eta,BV,muV0,muV1,sigmaV,aH, ...
@@ -89,9 +83,9 @@ S2(2) =( y1(end,9))/sum(y1(end,6:end)); % 2010
 % (2010-2012)
 y02 = y1(end,:);
 cov = 0.3119*0.87;
-%cov = x(5)*0.87;
 y02(10) = y02(10) + cov*(y02(8)+y02(9));
 y02(8) = (1-cov)*y02(8); y02(9) = (1-cov)*y02(9);
+
 tspan2 = linspace(0,2,3); % (2010-2012): Run from dec (2009) (0) to dec (2010) (1) to dec
 % (2011) (2)
 [t2,y2] = ode23s(@HATmodel,tspan2, y02, [], eta,BV,muV0,muV1,sigmaV,aH, ...
@@ -109,7 +103,6 @@ l = 3; m = 3;
 % End of 2011 (beg. 2012)
 y03 = y2(end,:);
 cov = 0.534*0.87;
-%cov = x(6)*0.87;
 y03(10) = y03(10) + cov*(y03(8)+y03(9));
 y03(8) = (1-cov)*y03(8); y03(9) = (1-cov)*y03(9);
 
@@ -122,124 +115,8 @@ tspan3 = linspace(0,1,2); % (2012): Run from dec (2011) (0) to dec (2012) (1)
 S1(4) = (y3(end,8))/sum(y3(end,6:end)); % 2013
 S2(4) = (y3(end,9))/sum(y3(end,6:end)); % 2013
 
-
-
-% % 2013
-% y04 = y3(end,:);
-% cov = 0.5808*0.87;
-% y04(10) = y04(10) + cov*(y04(8)+y04(9));
-% y04(8) = (1-cov)*y04(8); y04(9) = (1-cov)*y04(9);
-
-% tspan4 = linspace(0,1,2); % (2012): Run from dec (2011) (0) to dec (2012) (1)
-% [t4,y4] = ode23s(@HATmodel,tspan4, y04, [], eta,BV,muV0,muV1,sigmaV,aH, ...
-%                betaVH,tauV,muH,betaH,tauH,gammaH1,gammaH2, ...
-%                P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
-%                eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
-
-
-out = horzcat(S1,S2,V);
-
-
-%% Plots
-% Compartments = {'VP','VS','VE','VI','VR','HS','HE','HI1','HI2','HR'};
-% % $$$
-% for i = 1:length(Compartments);
-%     eval([Compartments{i} '= y(:,i);'])
-% end
-% % $$$
-% HI = HI1(end) + HI2(end);
-
-
-% close all
-% figure;
-% subplot(2,2,1)
-% plot(t,VP,'g',t,VS,'linewidth',2);
-% %xlim([0,0.02]);
-% title('V_P & V_S')
-% xlabel('Years')
-% ylabel('No. of tsetse')
-% legend('V_P','V_S')
-% legend('boxoff','southeast')
-% box('off')
-% subplot(2,2,2)
-% plot(t, VE,'m','linewidth',2);
-% %xlim([0,1]);
-% title('V_E')
-% xlabel('Years')
-% box('off')
-% subplot(2,2,3)
-% plot(t, VI,'r','linewidth',2);
-% %xlim([0,1]);
-% title('V_I')
-% xlabel('Years')
-% ylabel('No. of tsetse')
-% box('off')
-% subplot(2,2,4)
-% plot(t , VR,'c','linewidth',2);
-% %xlim([0,1]);
-% title('V_R')
-% xlabel('Years')
-% box('off')
-% % $$$
-% figure;
-% subplot(2,2,1)
-% plot(t,HS, 'g','linewidth',2);
-% %xlim([0,80]);
-% xlabel('Years')
-% ylabel('No. of people')
-% title('H_S')
-% box('off')
-% subplot(2,2,2)
-% plot(t,HE, 'm','linewidth',2);
-% %xlim([0,80]);
-% title('H_E')
-% box('off')
-% subplot(2,2,3)
-% plot(t, HI1,'r',t,HI2, 'linewidth',2);
-% xlabel('Years')
-% ylabel('No. of people')
-% %xlim([0,80]);
-% title(' H_{I_1} & H_{I_2}')
-% legend('H_{I_1}','H_{I_2}')
-% legend('boxoff','southeast')
-% box('off')
-% subplot(2,2,4)
-% plot(t,HR,'c','linewidth',2);
-% title('H_{R}')
-% %xlim([0,80]);
-% xlabel('Years')
-% box('off')
-% $$$
-% $$$ if LivStock ==1
-% $$$     figure;
-% $$$     subplot(2,2,1)
-% $$$     plot(t,LS,'g','linewidth',2);
-% $$$     xlim([0,0.2]);
-% $$$     xlabel('Years')
-% $$$     ylabel('No. of animals')
-% $$$     title('L_S')
-% $$$     box('off')
-% $$$     subplot(2,2,2)
-% $$$     plot(t, LE,'m','linewidth',2);
-% $$$     xlim([0,1]);
-% $$$     xlabel('Years')
-% $$$     title('L_E')
-% $$$     box('off')
-% $$$     subplot(2,2,3)
-% $$$     plot(t, LI,'r','linewidth',2);
-% $$$     xlim([0,1]);
-% $$$     xlabel('Years')
-% $$$     ylabel('No. of animals')
-% $$$     box('off')
-% $$$     title('L_I')
-% $$$     subplot(2,2,4)
-% $$$     plot(t , LR,'c','linewidth',2);
-% $$$     xlabel('Year')
-% $$$     xlim([0,1]);
-% $$$     title('L_R')
-% $$$     box('off')
-% $$$ end
-
+out{1} = horzcat(S1,S2,V);
+out{2} = y3(end,:);
 %toc
 
 end

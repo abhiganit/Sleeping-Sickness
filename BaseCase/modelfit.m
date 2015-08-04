@@ -21,7 +21,7 @@ function[] = modelfit()
     ci2 = quantile(Y,[0.025,0.975]) % S2, 2008
 
 
-    N = 200000;
+    N = 1000;
     % N samples from priors
     params = zeros(N,4);
     tic
@@ -38,19 +38,19 @@ function[] = modelfit()
 
         out = runHATmodel(params(j,:));
 
-        if (out(1)<=ci1(1)) || (out(1)>=ci1(2)) || (out(5)<=ci2(1)) ...
-                    || (out(5)>=ci2(2)) || out(9) > 0.010
+        if (out{1}(1)<=ci1(1)) || (out{1}(1)>=ci1(2)) || (out{1}(5)<=ci2(1)) ...
+                    || (out{1}(5)>=ci2(2)) || out{1}(9) > 0.010
             Likelihood(j) = 0;
         else
             Lik1 = 1; Lik2 = 1;
             for i = 1:4
-                Lik1 = betapdf(out(i),Data(i,1),SampSize(i,1));
-                Lik2 = betapdf(out(i+4),Data(i,2),SampSize(i,2));
+                Lik1 = betapdf(out{1}(i),Data(i,1),SampSize(i,1));
+                Lik2 = betapdf(out{1}(i+4),Data(i,2),SampSize(i,2));
             end
-            Likelihood(j) = Lik1*Lik2*betapdf(out(9),Data(1,3),SampSize(1,3));
+            Likelihood(j) = Lik1*Lik2*betapdf(out{1}(9),Data(1,3),SampSize(1,3));
         end
     end
     toc
-    save('output1','params','Likelihood')
+    save('output','params','Likelihood')
 
 end
