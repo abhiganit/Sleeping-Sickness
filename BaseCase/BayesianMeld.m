@@ -92,6 +92,7 @@ for i = 1:length(A)
         B(j,:) = A(i,:);
         out = A(i,:);
         Q(j,:) = P(i,:);
+        X(j,:) = Par(i,:);
         L(j) = betapdf(out(1),Data(1,1),SampSize(1,1))* ...
                betapdf(out(4),Data(4,1),SampSize(4,1))*...
                betapdf(out(5),Data(1,2),SampSize(1,2))* ...
@@ -101,7 +102,7 @@ for i = 1:length(A)
         j = j+1;
     end
 end
-save('initconds','B','Q');
+save('initconds','B','Q','X');
 [a,b] = max(L);
 
 t = 1:4;
@@ -134,19 +135,19 @@ ax.XTickLabel = {'2008', '2010','2012',' 2013'}
 
 
 % plot total prevalences
-% Calculate Error bar for total prevalences
-% bnds = [];
-% for i = 1:4
-%     bnds = vertcat(bnds,quantile(betarnd((Data(i,1)+Data(i,2)),SampSize(i,1),10000,1), ...
-%                     [0.025,0.975]));
-% end
+%Calculate Error bar for total prevalences
+bnds = [];
+for i = 1:4
+    bnds = vertcat(bnds,quantile(betarnd((Data(i,1)+Data(i,2)),SampSize(i,1),10000,1), ...
+                    [0.025,0.975]));
+end
 
-% bnds = abs(repmat((Data(:,1)+Data(:,2))./SampSize(:,1),1,2)-bnds1)
+bnds = abs(repmat((Data(:,1)+Data(:,2))./SampSize(:,1),1,2)-bnds1)
 
-% plot(t,B(:,1:4)+B(:,5:8),'Color',[0.8,0.8,0.8]);
-% hold on;
-% errorbar(t,(Data(:,1)+Data(:,2))./SampSize(:,1), bnds(:,1),bnds(:,2),'ko','linewidth',2)
-% hold off;
+plot(t,B(:,1:4)+B(:,5:8),'Color',[0.8,0.8,0.8]);
+hold on;
+errorbar(t,(Data(:,1)+Data(:,2))./SampSize(:,1), bnds(:,1),bnds(:,2),'ko','linewidth',2)
+hold off;
 
 
 

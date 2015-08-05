@@ -5,7 +5,7 @@ T = [];
 Y = [];
 
 for i = 1:255
-    [t,y] = runHATintervention(B(i,:),Q(i,:),intervention);
+    [t,y] = runHATintervention(X(i,:),Q(i,:),intervention);
     T{i} = t;
     Y{i} = y;
 end
@@ -19,17 +19,13 @@ for i =1:255
     V(i) = y(end,4)/sum(y(end,2:5));
 end
 
+% High intensity (more than 1 cases per 1000)
+% Medium intensity (more than 1 cases per 10000)
+% Low intensity (more than 1 cases per 1000000)
 
-E1 = 0; E2 = 0; E3 = 0;
-for i = 1:255
-    T1 = 1000*Tot(i);
-    T2 = 10000*Tot(i);
-    T3 = 1000000*Tot(i);
-    if T1 < 1
-        E1 = E1+1; E2 = E2+1; E3 = E3+1;
-    elseif T2 < 1
-        E2 = E2+1; E3 = E3+1;
-    elseif T3 < 1
-        E3 = E3+1;
-    end
-end
+E1 = length(Tot(1000*Tot<1))
+E2 = length(Tot(10000*Tot<1))
+E3 = length(Tot(1000000*Tot<1))
+P1 = E1/length(Tot)
+P2 = E2/length(Tot)
+P3 = E3/length(Tot)
