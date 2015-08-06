@@ -25,7 +25,8 @@ H = HS+HE+HI1+HI2+HR;
 if rho == 0
     mr = 0;
 else
-    mr = mortality_rate(rho,t,l,m);
+    aH = aH*(1-mortality_rate(rho,t,l,m));
+    mr = 0;
 end
 
 

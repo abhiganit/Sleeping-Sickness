@@ -21,7 +21,7 @@ function[] = modelfit()
     ci2 = quantile(Y,[0.025,0.975]) % S2, 2008
 
 
-    N = 1000;
+    N = 60000;
     % N samples from priors
     params = zeros(N,4);
     tic
@@ -32,7 +32,7 @@ function[] = modelfit()
         %        cov1 = rand;
         %        cov2 = rand;
         %        cov3 = rand;
-        rho = 365*0.25*rand;
+        rho = rand;
 
         params(j,:)  = [betaVH,betaH,zeta,rho];
 

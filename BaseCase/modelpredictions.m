@@ -5,13 +5,13 @@ intervention = 'continue'
 %       B is set of 2012 prevalences
 
 Y = [];
-for i = 1:255
+for i = 1:length(B)
     [t,y] = runHATintervention(X(i,:),Q(i,:),intervention);
      Y{i} = y;
 end
 
 Fail = [];
-for i = 1:255
+for i = 1:length(B)
     if size(Y{i},1)<length(Y{1})
        Fail = [Fail,i];
     end
@@ -41,23 +41,27 @@ end
 
 % Plots
 
+
 fig1 = figure('Position',[100,100,1000,500]); % Total prevalences and vector prevalences
-                %subplot(1,2,1)
+subplot(2,1,1)
 plot(t,TotPrev,'color',[0.7,0.7,0.7])
 title('HAT prevalences')
 ax = gca;
 ax.XTick = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
 ax.XTickLabel = {'2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026','2027','2028','2029','2030'}
-
-
-%plot(t,VP)
+subplot(2,1,2)
+plot(t,VP)
+title('Vector prevalences')
+ax = gca;
+ax.XTick = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
+ax.XTickLabel = {'2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026','2027','2028','2029','2030'}
 
 
 
 
 fig2 = figure('Position',[100,100,1000,500]);; % Continuous Probability of elimination as Public
                % Health problem.
-plot(t,P2)
+plot(t,P1)
 title('Prob. of Elim. as PHP')
 ax = gca;
 ax.XTick = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]

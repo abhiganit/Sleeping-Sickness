@@ -9,7 +9,7 @@
 %     Lik = horzcat(Lik,Likelihood);
 % end
 
-load Sample
+load output
 Lik = Likelihood;
 Par = params;
 M = length(Lik) % Total sample size
@@ -23,16 +23,16 @@ SampSize = [1488,1488,1634;
             7788,7788,0];
 
 %% Calculate 95% CI for data points
-bnds1 = []; bnds2 = [];
+bnds01 = []; bnds02 = [];
 for i = 1:4
-    bnds1 = vertcat(bnds1,quantile(betarnd(Data(i,1),SampSize(i,1),10000,1), ...
+    bnds01 = vertcat(bnds01,quantile(betarnd(Data(i,1),SampSize(i,1),10000,1), ...
                     [0.025,0.975]));
-    bnds2 = vertcat(bnds2,quantile(betarnd(Data(i,2),SampSize(i,2),10000,1), ...
+    bnds02 = vertcat(bnds02,quantile(betarnd(Data(i,2),SampSize(i,2),10000,1), ...
                     [0.025,0.975]));
 end
 
-bnds1 = abs(repmat(Data(:,1)./SampSize(:,1),1,2)-bnds1)
-bnds2 = abs(repmat(Data(:,2)./SampSize(:,2),1,2)-bnds2)
+bnds1 = abs(repmat(Data(:,1)./SampSize(:,1),1,2)-bnds01)
+bnds2 = abs(repmat(Data(:,2)./SampSize(:,2),1,2)-bnds02)
 
 
 %% Calculate Weights and discard zero Likelihood parameters
@@ -59,7 +59,7 @@ length(Par)
 % confidence interval for year 2012 as well.
 j = 1;
 for i = 1:length(A)
-    if A(i,4) >= 0.0001351 & A(i,4) <= 0.0008 & A(i,8) >= 0.0001433  & A(i,8) <= 0.0011117
+     if A(i,4) >= bnds01(4,1) & A(i,4) <= bnds01(4,2) & A(i,8) >= bnds02(4,1)  & A(i,8) <= bnds02(4,2)
         B(j,:) = A(i,:); % Save respective prevaences
         out = A(i,:);
         Q(j,:) = P(i,:); % Save respective end points (initial
@@ -72,7 +72,7 @@ for i = 1:length(A)
                                                        % betapdf(out(9),Data(1,3),SampSize(1,3));
         % recalculating likelihood based on only 2 years
         j = j+1;
-    end
+     end
 end
 save('initconds','B','Q','X');
 [a,b] = max(L);
@@ -100,10 +100,9 @@ ax = gca;
 ax.XTick = [1,2,3,4]
 ax.XTickLabel = {'2008', '2010','2012',' 2013'}
 
-
-% fig2 = figure;
-% scatter(B(:,9))
-% title('Vector Prevalence (2008)')
+fig2 = figure;
+plot(B(:,9),'o')
+title('Vector Prevalence (2008)')
 
 
 
