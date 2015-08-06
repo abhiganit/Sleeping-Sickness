@@ -136,7 +136,7 @@ elseif intervention ==2 % active case finding campaigns every 2
     end
 elseif intervention == 3 %
     tint = linspace(0,5,5*360)
-    rho = 365*0.01;
+    rho = 365*0.05;
     l = 3;
     m = 3;
     [ti,yi] = ode45(@HATmodel,tint, ye0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
