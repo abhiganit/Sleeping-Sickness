@@ -1,17 +1,17 @@
 %% Load parameter samples
-% Par = [];
-% Lik = [];
-% N = 10  % No of independent sample runs that I ran
-% for i = 1:N
-%     filename = sprintf('Sample%d.mat',i);
-%     load(filename)
-%     Par = vertcat(Par,params);
-%     Lik = horzcat(Lik,Likelihood);
-% end
+Par = [];
+Lik = [];
+N = 2  % No of independent sample runs that I ran
+for i = 1:N
+    filename = sprintf('output%d.mat',i);
+    load(filename)
+    Par = vertcat(Par,params);
+    Lik = horzcat(Lik,Likelihood);
+end
 
-load output
-Lik = Likelihood;
-Par = params;
+% load output
+% Lik = Likelihood;
+% Par = params;
 M = length(Lik) % Total sample size
 Data = [3,2,9.53;
         4,8, 0  ;
@@ -92,7 +92,7 @@ ax.XTickLabel = {'2008', '2010','2012',' 2013'}
 subplot(1,2,2)
 plot(t,B(:,5:8),'Color',[0.8,0.8,0.8]);
 hold on;
-plot(t,A(b,5:8),'r','linewidth',1);
+plot(t,B(b,5:8),'r','linewidth',1);
 errorbar(t,Data(:,2)./SampSize(:,2), bnds2(:,1),bnds2(:,2),'ko','linewidth',1.5)
 hold off;
 title('Stage II')

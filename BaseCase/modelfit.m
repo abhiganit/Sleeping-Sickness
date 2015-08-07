@@ -51,6 +51,6 @@ function[] = modelfit()
         end
     end
     toc
-    save('output','params','Likelihood')
+    save('output2','params','Likelihood')
 
 end
