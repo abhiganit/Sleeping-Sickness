@@ -85,8 +85,9 @@ switch(intervention)
                 eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
     t = vertcat(t,tc);
     y = vertcat(y,yc);
+    ye0 = yc(end,:);
     rho = 0;
-    tint = linspace(8,20,12*360);
+    tint = linspace(8,18,10*360);
     [tc,yc] = ode23s(@HATmodel,tint, ye0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
                 betaVH,tauV,muH,betaH,tauH,gammaH1,gammaH2, ...
                 P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
