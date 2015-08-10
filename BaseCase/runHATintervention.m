@@ -3,7 +3,7 @@ function[t,y]  = runHATintervention(x,init,intervention)
 
 %% Interventions implemented
 
-tic;
+%tic;
 
 %% Tsetse Parameters (All rates are in years)
 eta = 365./20;                       % 1/eta: pupae stage duration
@@ -54,7 +54,7 @@ y0(8) = (1-cov)*y0(8); y0(9) = (1-cov)*y0(9);
 rho = x(4); % 0.01*365;
 l = 3; m = 3;
 % % run model for a year
-tspan = linspace(0,1,360); % (2013): Run from dec (2012) (0) to dec (2013) (1)
+tspan = linspace(0+20/360,1,340); % (2013): Run from dec (2012) (0) to dec (2013) (1)
 [tp,yp] = ode23s(@HATmodel,tspan, y0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
                  betaVH,tauV,muH,betaH,tauH,gammaH1,gammaH2, ...
                  P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
@@ -64,12 +64,12 @@ tspan = linspace(0,1,360); % (2013): Run from dec (2012) (0) to dec (2013) (1)
 
 %% Running model with Interventions
 ye0 = yp(end,:); % Initializing from equilibrium
-t = tp;
-y = yp;
+t = vertcat(0,tp);
+y = vertcat(init,yp);
 switch(intervention)
   case 'continue'
     rho = 0;
-    tint = linspace(1,18,17*360);
+    tint = linspace(1,17,16*360);
     [tc,yc] = ode23s(@HATmodel,tint, ye0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
                 betaVH,tauV,muH,betaH,tauH,gammaH1,gammaH2, ...
                 P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
@@ -77,8 +77,17 @@ switch(intervention)
     t = vertcat(t,tc);
     y = vertcat(y,yc);
   case 'yearly vector control'
+    rho =0;
+    tint = linspace(1,3,2*360);
+    [tc0,yc0] = ode23s(@HATmodel,tint, ye0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
+                betaVH,tauV,muH,betaH,tauH,gammaH1,gammaH2, ...
+                P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
+                eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
+    t = vertcat(t,tc0);
+    y = vertcat(y,yc0);
     rho = x(4);
-    tint = linspace(1,8,7*360);
+    tint = linspace(3,8,5*360);
+    ye0 = yc0(end,:);
     [tc,yc] = ode23s(@HATmodel,tint, ye0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
                 betaVH,tauV,muH,betaH,tauH,gammaH1,gammaH2, ...
                 P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
@@ -87,17 +96,116 @@ switch(intervention)
     y = vertcat(y,yc);
     ye0 = yc(end,:);
     rho = 0;
-    tint = linspace(8,18,10*360);
+    tint = linspace(8,17,9*360);
     [tc,yc] = ode23s(@HATmodel,tint, ye0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
                 betaVH,tauV,muH,betaH,tauH,gammaH1,gammaH2, ...
                 P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
                 eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
     t = vertcat(t,tc);
     y = vertcat(y,yc);
+  case 'only yearly active case-finding'
+    rho = 0;
+    tint = linspace(1,3,2*360);
+    [tc0,yc0] = ode23s(@HATmodel,tint, ye0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
+                betaVH,tauV,muH,betaH,tauH,gammaH1,gammaH2, ...
+                P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
+                eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
+    t = vertcat(t,tc0);
+    y = vertcat(y,yc0);
+    tint = linspace(3+20/360,4,360);
+    ye0 = yc0(end,:);
+    for j = 1:4
+        ye0(10) = ye0(10) + cov*(ye0(8)+ye0(9));
+        ye0(8) = (1-cov)*ye0(8); ye0(9) = (1-cov)*ye0(9);
+        [tl,yl] = ode23s(@HATmodel,tint, ye0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
+                betaVH,tauV,muH,betaH,tauH,gammaH1,gammaH2, ...
+                P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
+                eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
+        t = vertcat(t,tl);
+        y = vertcat(y,yl);
+        tint = linspace(tint(end)+20/360,tint(end)+1,340);
+        ye0 = yl(end,:);
+    end
+    rho = 0;
+    tint = linspace(8,17,9*360);
+    [tc,yc] = ode23s(@HATmodel,tint, ye0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
+                betaVH,tauV,muH,betaH,tauH,gammaH1,gammaH2, ...
+                P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
+                eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
+    t = vertcat(t,tc);
+    y = vertcat(y,yc);
+
+  case 'yearly vector control with active case-finding'
+    rho = 0;
+    tint = linspace(1,3,2*360);
+    [tc0,yc0] = ode23s(@HATmodel,tint, ye0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
+                betaVH,tauV,muH,betaH,tauH,gammaH1,gammaH2, ...
+                P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
+                eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
+    t = vertcat(t,tc0);
+    y = vertcat(y,yc0);
+    tint = linspace(3+20/360,4,340);
+    rho = x(4);
+    ye0 = yc0(end,:);
+    for j = 1:4
+        ye0(10) = ye0(10) + cov*(ye0(8)+ye0(9));
+        ye0(8) = (1-cov)*ye0(8); ye0(9) = (1-cov)*ye0(9);
+        [tl,yl] = ode23s(@HATmodel,tint, ye0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
+                betaVH,tauV,muH,betaH,tauH,gammaH1,gammaH2, ...
+                P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
+                eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
+        t = vertcat(t,tl);
+        y = vertcat(y,yl);
+        tint = linspace(tint(end)+20/360,tint(end)+1,340);
+        ye0 = yl(end,:);
+        cov = 0.5808*0.87;
+    end
+    rho = 0;
+    tint = linspace(8,17,9*360);
+    [tc,yc] = ode23s(@HATmodel,tint, ye0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
+                betaVH,tauV,muH,betaH,tauH,gammaH1,gammaH2, ...
+                P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
+                eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
+    t = vertcat(t,tc);
+    y = vertcat(y,yc);
+  case 'yearly vector control with alternate active case-finding'
+    rho = 0;
+    tint = linspace(1,3,2*360);
+    [tc0,yc0] = ode23s(@HATmodel,tint, ye0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
+                betaVH,tauV,muH,betaH,tauH,gammaH1,gammaH2, ...
+                P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
+                eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
+    t = vertcat(t,tc0);
+    y = vertcat(y,yc0);
+    rho = x(4);
+    tint = linspace(4+20/360,6,2*360-20);
+    ye0 = yc0(end,:);
+    for j = 1:2
+        ye0(10) = ye0(10) + cov*(ye0(8)+ye0(9));
+        ye0(8) = (1-cov)*ye0(8); ye0(9) = (1-cov)*ye0(9);
+        [tl,yl] = ode23s(@HATmodel,tint, ye0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
+                betaVH,tauV,muH,betaH,tauH,gammaH1,gammaH2, ...
+                P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
+                eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
+        t = vertcat(t,tl);
+        y = vertcat(y,yl);
+        tint = linspace(tint(end)+20/360,tint(end)+2,2*360-20);
+        ye0 = yl(end,:);
+        cov = 0.5808*0.87;
+    end
+    rho = 0;
+    tint = linspace(8,17,9*360);
+    [tc,yc] = ode23s(@HATmodel,tint, ye0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
+                betaVH,tauV,muH,betaH,tauH,gammaH1,gammaH2, ...
+                P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
+                eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
+    t = vertcat(t,tc);
+    y = vertcat(y,yc);
+
   otherwise
 end
 
 
-toc
+%toc
 
 end

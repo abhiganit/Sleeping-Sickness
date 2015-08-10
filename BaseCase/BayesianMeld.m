@@ -1,17 +1,17 @@
 %% Load parameter samples
-Par = [];
-Lik = [];
-N = 2  % No of independent sample runs that I ran
-for i = 1:N
-    filename = sprintf('output%d.mat',i);
-    load(filename)
-    Par = vertcat(Par,params);
-    Lik = horzcat(Lik,Likelihood);
-end
+% Par = [];
+% Lik = [];
+% N = 2  % No of independent sample runs that I ran
+% for i = 1:N
+%     filename = sprintf('output%d.mat',i);
+%     load(filename)
+%     Par = vertcat(Par,params);
+%     Lik = horzcat(Lik,Likelihood);
+% end
 
-% load output
-% Lik = Likelihood;
-% Par = params;
+load Sample
+Lik = Likelihood;
+Par = params;
 M = length(Lik) % Total sample size
 Data = [3,2,9.53;
         4,8, 0  ;
@@ -74,13 +74,14 @@ for i = 1:length(A)
         j = j+1;
      end
 end
+length(B)
 save('initconds','B','Q','X');
 [a,b] = max(L);
 
 t = 1:4;
 fig1 = figure;
 subplot(1,2,1)
-plot(t,B(:,1:4),'Color',[0.8,0.8,0.8]);
+plot(t,B(:,1:4),'Color',[0.75,0.75,0.75]);
 hold on;
 plot(t,B(b,1:4),'r','linewidth',1);
 errorbar(t,Data(:,1)./SampSize(:,1), bnds1(:,1),bnds1(:,2),'ko','linewidth',1.5)
@@ -90,7 +91,7 @@ ax = gca;
 ax.XTick = [1,2,3,4]
 ax.XTickLabel = {'2008', '2010','2012',' 2013'}
 subplot(1,2,2)
-plot(t,B(:,5:8),'Color',[0.8,0.8,0.8]);
+plot(t,B(:,5:8),'Color',[0.75,0.75,0.75]);
 hold on;
 plot(t,B(b,5:8),'r','linewidth',1);
 errorbar(t,Data(:,2)./SampSize(:,2), bnds2(:,1),bnds2(:,2),'ko','linewidth',1.5)
