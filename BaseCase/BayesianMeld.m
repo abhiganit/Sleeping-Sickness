@@ -9,7 +9,7 @@
 %     Lik = horzcat(Lik,Likelihood);
 % end
 
-load Sample
+load output
 Lik = Likelihood;
 Par = params;
 M = length(Lik) % Total sample size
@@ -59,7 +59,7 @@ length(Par)
 % confidence interval for year 2012 as well.
 j = 1;
 for i = 1:length(A)
-     if A(i,4) >= bnds01(4,1) & A(i,4) <= bnds01(4,2) & A(i,8) >= bnds02(4,1)  & A(i,8) <= bnds02(4,2)
+      if A(i,4) >= bnds01(4,1) & A(i,4) <= bnds01(4,2) & A(i,8) >= bnds02(4,1)  & A(i,8) <= bnds02(4,2)
         B(j,:) = A(i,:); % Save respective prevaences
         out = A(i,:);
         Q(j,:) = P(i,:); % Save respective end points (initial
