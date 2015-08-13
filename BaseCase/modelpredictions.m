@@ -17,9 +17,12 @@
 
 Runforward = {'continue','yearly vector control','only yearly active case-finding','yearly vector control with active case-finding','yearly vector control with alternate active case-finding','vector-control scale-up 1','vector-control scale-up 2','active case finding scale-down 1','active case finding scale-down 2','yearly vector control with active case-finding scale-up 1','yearly vector control with active case-finding scale-up 2'}
 
+
+s = 1;
 %s = 7;
+
 %s = 3;
-for s = 11:length(Runforward)
+for s = 1:length(Runforward)
     load initconds
     intervention = Runforward{s}
     Y = [];
@@ -41,9 +44,11 @@ for s = 11:length(Runforward)
 
 
     % Calculate total prevalences at each time point till 2030;
-    Shai = (cellfun(@(y) (y(:,8)+y(:,9))'./sum(y(:,6:end)'),Y,'UniformOutput',false));
+    Shai = (cellfun(@(y) (y(:,8)+y(:,9))'./sum(y(:,6:10)'),Y,'UniformOutput',false));
     TotPrev = cell2mat(Shai');
-    VP = cell2mat((cellfun(@(y) y(:,4)'./sum(y(:,2:5)'), Y,'UniformOutput',false))');
+    VP = cell2mat((cellfun(@(y) y(:,4)'./sum(y(:,2:5)'), Y, ...
+                           'UniformOutput',false))');
+    LP = cell2mat((cellfun(@(y) y(:,13)'./sum(y(:,11:end)'), Y,'UniformOutput',false))');
 
 
     for i = 1:size(TotPrev,2)
@@ -75,16 +80,22 @@ end
 
 %% Use this part to plot the projections of each strategies
 
-% load Predictions1;
+%  load Predictions7
 % fig1 = figure('Position',[100,100,1000,500]); % Total prevalences and vector prevalences
-% subplot(2,1,1)
+% subplot(3,1,1)
 % plot(t,TotPrev,'color',[0.5,0.5,0.5])
 % title('HAT prevalences')
 % ax = gca;
 % ax.XTick = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
 % ax.XTickLabel = {'2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026','2027','2028','2029','2030'}
-% subplot(2,1,2)
-% plot(t(),VP,'color',[0.5,0.5,0.5])
+% subplot(3,1,2)
+% plot(t,VP,'color',[0.5,0.5,0.5])
+% title('Vector prevalences')
+% ax = gca;
+% ax.XTick = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17];
+% ax.XTickLabel = {'2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026','2027','2028','2029','2030'}
+% subplot(3,1,3)
+% plot(t,VP,'color',[0.5,0.5,0.5])
 % title('Vector prevalences')
 % ax = gca;
 % ax.XTick = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17];

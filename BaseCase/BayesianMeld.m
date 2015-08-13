@@ -9,7 +9,7 @@
 %     Lik = horzcat(Lik,Likelihood);
 % end
 
-load output
+load output1
 Lik = Likelihood;
 Par = params;
 M = length(Lik) % Total sample size
@@ -105,6 +105,9 @@ fig2 = figure;
 plot(B(:,9),'o')
 title('Vector Prevalence (2008)')
 
+fig3 = figure;
+plot(B(:,10),'o')
+title('Vector Prevalence (2008)')
 
 
 

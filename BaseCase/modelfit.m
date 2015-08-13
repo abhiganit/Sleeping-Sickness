@@ -4,7 +4,7 @@ function[] = modelfit()
     tic;
 
     % Data & Sample: Years(2008/10/12/13). Columns:  Stage 1 | Stage 2
-    % Vector Prevalence
+    % Vector Prevalence (0.049/50 and 0.8/300)
 
     Data = [3,2,9.53;
             4,8, 0.049  ;
@@ -21,7 +21,7 @@ function[] = modelfit()
     ci2 = quantile(Y,[0.025,0.975]) % S2, 2008
 
 
-    N = 100000;
+    N = 400000;
     % N samples from priors
     params = zeros(N,5);
     tic
@@ -49,6 +49,6 @@ function[] = modelfit()
         end
     end
     toc
-    save('output','params','Likelihood')
+    save('output2','params','Likelihood')
 
 end

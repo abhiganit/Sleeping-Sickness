@@ -39,7 +39,6 @@ zeta2 = 1/x(3);
 
 
 %% Animal Parameters
-%% Livestock Parameters (All rates are in years)
 betaL = x(5);                        % Trans. prob. from tsetse to livestock
 tauL = 365./12;                      % 1/tauL: incubation period in livestock
 gammaL = 365./50;                    % 1/gammaL: infectious period in livestock
@@ -91,8 +90,8 @@ tspan1 = linspace(0,2,3);  % (2008-2010) Run from dec 2007 (0), dec (2008) (1),
 
 
 
-S1(2) =(y1(end,8))/sum(y1(end,6:end)); % 2010
-S2(2) =( y1(end,9))/sum(y1(end,6:end)); % 2010
+S1(2) =(y1(end,8))/sum(y1(end,6:10)); % 2010
+S2(2) =( y1(end,9))/sum(y1(end,6:10)); % 2010
 
 % (2010-2012)
 y02 = y1(end,:);
@@ -108,8 +107,8 @@ tspan2 = linspace(0,2,3); % (2010-2012): Run from dec (2009) (0) to dec (2010) (
                eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
 
 
-S1(3) = (y2(end,8))/sum(y2(end,6:end)); % 2012
-S2(3) = (y2(end,9))/sum(y2(end,6:end)); % 2012
+S1(3) = (y2(end,8))/sum(y2(end,6:10)); % 2012
+S2(3) = (y2(end,9))/sum(y2(end,6:10)); % 2012
 
 % year 2012
 rho = x(4);
@@ -127,8 +126,8 @@ tspan3 = linspace(0,1,2); % (2012): Run from dec (2011) (0) to dec (2012) (1)
                P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
                eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
 
-S1(4) = (y3(end,8))/sum(y3(end,6:end)); % 2013
-S2(4) = (y3(end,9))/sum(y3(end,6:end)); % 2013
+S1(4) = (y3(end,8))/sum(y3(end,6:10)); % 2013
+S2(4) = (y3(end,9))/sum(y3(end,6:10)); % 2013
 
 out{1} = horzcat(S1,S2,V1,L1);
 out{2} = y3(end,:);
