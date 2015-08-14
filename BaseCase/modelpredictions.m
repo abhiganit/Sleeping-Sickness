@@ -64,7 +64,7 @@ for s = 1:length(Runforward)
 
 
     filename = sprintf('Predictions%d.mat',s);
-    save(filename,'t','TotPrev','VP','E1','E2','E3','P1','P2','P3')
+    save(filename,'t','TotPrev','VP','LP','E1','E2','E3','P1','P2','P3')
     clear all
     Runforward = {'continue','yearly vector control','only yearly active case-finding','yearly vector control with active case-finding','yearly vector control with alternate active case-finding','vector-control scale-up 1','vector-control scale-up 2','active case finding scale-down 1','active case finding scale-down 2','yearly vector control with active case-finding scale-up 1','yearly vector control with active case-finding scale-up 2'}
 end
@@ -80,26 +80,26 @@ end
 
 %% Use this part to plot the projections of each strategies
 
-%  load Predictions7
-% fig1 = figure('Position',[100,100,1000,500]); % Total prevalences and vector prevalences
-% subplot(3,1,1)
-% plot(t,TotPrev,'color',[0.5,0.5,0.5])
-% title('HAT prevalences')
-% ax = gca;
-% ax.XTick = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
-% ax.XTickLabel = {'2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026','2027','2028','2029','2030'}
-% subplot(3,1,2)
-% plot(t,VP,'color',[0.5,0.5,0.5])
-% title('Vector prevalences')
-% ax = gca;
-% ax.XTick = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17];
-% ax.XTickLabel = {'2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026','2027','2028','2029','2030'}
-% subplot(3,1,3)
-% plot(t,VP,'color',[0.5,0.5,0.5])
-% title('Vector prevalences')
-% ax = gca;
-% ax.XTick = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17];
-% ax.XTickLabel = {'2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026','2027','2028','2029','2030'}
+ load Predictions1
+fig1 = figure('Position',[100,100,1000,500]); % Total prevalences and vector prevalences
+subplot(3,1,1)
+plot(t,TotPrev,'color',[0.5,0.5,0.5])
+title('HAT prevalences')
+ax = gca;
+ax.XTick = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
+ax.XTickLabel = {'2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026','2027','2028','2029','2030'}
+subplot(3,1,2)
+plot(t,VP,'color',[0.5,0.5,0.5])
+title('Vector prevalences')
+ax = gca;
+ax.XTick = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17];
+ax.XTickLabel = {'2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026','2027','2028','2029','2030'}
+subplot(3,1,3)
+plot(t,LP,'color',[0.5,0.5,0.5])
+title('Animal prevalences')
+ax = gca;
+ax.XTick = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17];
+ax.XTickLabel = {'2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026','2027','2028','2029','2030'}
 
 
 
@@ -167,19 +167,4 @@ box('off')
 ylabel('Probability of HAT elimination by the end of 2020')
 ax = gca;
 %ax.XTick = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
-ax.XTickLabel = {'Annual vector Control','Annual case-finding','Annual vector control with case-finding' }
-
-
-t = linspace(1,3,2);
-tint = linspace(3.1,5,2);
-
-for j = 1:4
-tl = tint;
-t = horzcat(t,tl);
-tint = linspace(tint(end)+0.1,tint(end)+2,2);
-end
-t
-
-252,141,89
-255,255,191
-145,191,219
+ax.XTickLabel = {'Annual vector Control','Annual case-finding','Annual vector control with case-finding ' }

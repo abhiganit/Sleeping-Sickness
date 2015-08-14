@@ -1,15 +1,15 @@
 %% Load parameter samples
-% Par = [];
-% Lik = [];
-% N = 2  % No of independent sample runs that I ran
-% for i = 1:N
-%     filename = sprintf('output%d.mat',i);
-%     load(filename)
-%     Par = vertcat(Par,params);
-%     Lik = horzcat(Lik,Likelihood);
-% end
+Par = [];
+Lik = [];
+N = 3  % No of independent sample runs that I ran
+for i = 1:N
+    filename = sprintf('output%d.mat',i);
+    load(filename)
+    Par = vertcat(Par,params);
+    Lik = horzcat(Lik,Likelihood);
+end
 
-load output1
+%load output1
 Lik = Likelihood;
 Par = params;
 M = length(Lik) % Total sample size
