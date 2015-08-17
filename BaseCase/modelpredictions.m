@@ -105,7 +105,7 @@ for i = 1:5
     plot(t,P2,'linewidth',1.5)
     %    hold on;
 end
-title('Prob. of Elim. as Public health problem')
+title('Probability of elimination as public health problem')
 legend('No control','Annual vector control','Annual active case-finding','Annual vector control and active case-finding','Annual vector control and biennial active case-finding ')
 % ,'Vector control scale-up by 50% ','Vector control scale-up by 75% ','Case-finding scale-down to 35% ','Case-finding scale-down to 30% ','Vector control and case finding scale-down to 35% ', 'Vector control and case finding scale-down to 30% ')
 legend('Location','southeast')
@@ -147,28 +147,38 @@ for i = ind3
     j = j+1;
 end
 
-fig4 = figure('Position',[100,100,1200,800]);
-bar_handle = bar(ProbMat')
-set(bar_handle(1),'FaceColor',[252,141,89]/255);
-set(bar_handle(2),'FaceColor',[252,255,191]/255);
-set(bar_handle(3),'FaceColor',[145,191,219]/255);
-box('off')
-ylabel('Probability of HAT elimination by the end of 2020')
-ax = gca;
-%ax.XTick = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
-ax.XTickLabel = {'Annual vector Control','Annual case-finding','Annual vector control with case-finding' }
+% fig4 = figure('Position',[100,100,1200,800]);
+% bar_handle = bar(ProbMat')
+% set(bar_handle(1),'FaceColor',[252,141,89]/255);
+% set(bar_handle(2),'FaceColor',[252,255,191]/255);
+% set(bar_handle(3),'FaceColor',[145,191,219]/255);
+% box('off')
+% ylabel('Probability of HAT elimination by the end of 2020')
+% ax = gca;
+% ax.XTickLabel = {'Annual vector Control','Annual case-finding','Annual vector control with case-finding' }
+% [hx,hy] = format_ticks(gca,{'Annual vector control',...
+%                     'Annual vector control (50scale-up)',...
+%                     'Annual vector control (75scale-up)',...
+%                     'Annual case-finding',...
+%                     'Annual case-finding (35coverage)',...
+%                     'Annual case-finding (30coverage)',...
+%                     'Annual vector control with annual case-finding ',...
+%                     'Annual vector control with annual case-finding (35coverage)',...
+%                     'Annual vector control with annual case-finding (30coverage)'},...
+%                        [],[0.75,1,1.21,1.75,2,2.21,2.75,3,3.21],[],15,0);
 
 
-t = linspace(1,3,2);
-tint = linspace(3.1,5,2);
 
-for j = 1:4
-tl = tint;
-t = horzcat(t,tl);
-tint = linspace(tint(end)+0.1,tint(end)+2,2);
-end
-t
+% t = linspace(1,3,2);
+% tint = linspace(3.1,5,2);
 
-252,141,89
-255,255,191
-145,191,219
+% for j = 1:4
+% tl = tint;
+% t = horzcat(t,tl);
+% tint = linspace(tint(end)+0.1,tint(end)+2,2);
+% end
+% t
+
+% 252,141,89
+% 255,255,191
+% 145,191,219

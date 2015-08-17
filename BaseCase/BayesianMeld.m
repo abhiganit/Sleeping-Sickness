@@ -75,33 +75,50 @@ for i = 1:length(A)
      end
 end
 length(B)
-save('initconds','B','Q','X');
-[a,b] = max(L);
+%save('initconds','B','Q','X');
+load initconds
+%[a,b] = max(L);
+DS1 = Data(1:1:4,1)./SampSize(1:1:4,1);
+DS2 = Data(1:1:4,2)./SampSize(1:1:4,2);
+bd1 = bnds1(1:1:4,:); bd2 = bnds2(1:1:4,:);
+DV1 = Data(2:3,1)./SampSize(2:3,1);
+DV2 = Data(2:3,2)./SampSize(2:3,);
+tds = 1:4; tdv = [2,3];
 
+close all
 t = 1:4;
-fig1 = figure;
+fig1 = figure();
 subplot(1,2,1)
 plot(t,B(:,1:4),'Color',[0.75,0.75,0.75]);
 hold on;
-plot(t,B(b,1:4),'r','linewidth',1);
-errorbar(t,Data(:,1)./SampSize(:,1), bnds1(:,1),bnds1(:,2),'ko','linewidth',1.5)
+%plot(t,B(b,1:4),'r','linewidth',1);
+errorbar(tds,DS1, bd1(:,1),bd1(:,2),'ko','linewidth',1.5)
+%plot(tdv,DV1,'ko','linewidth',1.5);
 hold off;
 title('Stage I')
 ax = gca;
 ax.XTick = [1,2,3,4]
 ax.XTickLabel = {'2008', '2010','2012',' 2013'}
+box('off')
 subplot(1,2,2)
 plot(t,B(:,5:8),'Color',[0.75,0.75,0.75]);
 hold on;
-plot(t,B(b,5:8),'r','linewidth',1);
-errorbar(t,Data(:,2)./SampSize(:,2), bnds2(:,1),bnds2(:,2),'ko','linewidth',1.5)
+%plot(t,B(b,5:8),'r','linewidth',1);
+errorbar(tds,DS2, bd2(:,1),bd2(:,2),'ko','linewidth',1.5)
+%plot(tdv,DV2,'ko','linewidth',1.5);
 hold off;
 title('Stage II')
 ax = gca;
 ax.XTick = [1,2,3,4]
 ax.XTickLabel = {'2008', '2010','2012',' 2013'}
+box('off')
+
+
 
 fig2 = figure;
+
+
+
 plot(B(:,9),'o')
 title('Vector Prevalence (2008)')
 
@@ -112,18 +129,21 @@ title('Vector Prevalence (2008)')
 
 %% Re-sampling based on weights (melding)
 % % Posterior
-% total = 200;
 
-% j = 1;
-% while j < total+1
-%     k =randi(length(weights),1);
-%     if(rand <weights(k))
-%     param = Par(k,:);
-%     A(j,:) = runHATmodel(param);
-%     posterior(j,:)=param;
-%      j = j+1;
-%     end
-% end
+parfor i = 1:length(B)
+    weights(i) = L(i)/sum(L);
+end
+
+total = 500;
+
+j = 1;
+while j < total+1
+    k =randi(length(B),1);
+    if(rand <weights(k))
+    posterior(j,:)=X(k,:);
+     j = j+1;
+    end
+end
 
 % % Posterior fits
 % parfor i = 1:total
