@@ -20,7 +20,7 @@ E2 = [0.0088         0         0
 close all
 fig4 = figure('units','normalized','outerposition',[0 0 1 1])
 subplot(2,1,1)
-bar_handle = bar(ProbMat1)
+bar_handle = bar(P1)
 set(gca,'XTick',[])
 set(bar_handle(1),'FaceColor',[252,141,89]/255);
 set(bar_handle(2),'FaceColor',[252,255,191]/255);
@@ -28,7 +28,7 @@ set(bar_handle(3),'FaceColor',[145,191,219]/255);
 box('off')
 ylabel('Probability of HAT elimination by the end of 2020')
 subplot(2,1,2)
-bar_handle = bar(ProbMat2)
+bar_handle = bar(P2)
 set(bar_handle(1),'FaceColor',[252,141,89]/255);
 set(bar_handle(2),'FaceColor',[252,255,191]/255);
 set(bar_handle(3),'FaceColor',[145,191,219]/255);
