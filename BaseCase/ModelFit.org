@@ -70,3 +70,11 @@
 
 
 * Likelihood
+
+
+What if we assume that as a result of vector control, the contact
+decreased by 58% and it happened in linear fashion. Now, we assume
+that in the absence of vector control the contact goes back to same
+value again linearly in one year time if vector control is not
+continued, whereas if it is continued then it remains at reduced value
+for as long as it is continued.

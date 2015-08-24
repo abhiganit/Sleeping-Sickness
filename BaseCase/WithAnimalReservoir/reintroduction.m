@@ -18,7 +18,7 @@
 Runforward = {'continue','yearly vector control','only yearly active case-finding','yearly vector control with active case-finding','yearly vector control with alternate active case-finding','vector-control scale-up 1','vector-control scale-up 2','active case finding scale-down 1','active case finding scale-down 2','yearly vector control with active case-finding scale-up 1','yearly vector control with active case-finding scale-up 2'}
 
 %s = 7;
-s = 4;
+%s = 4;
 for s = 4:5
     load initconds
     intervention = Runforward{s}
@@ -62,11 +62,11 @@ end
 
 
 %% Ignore this part (combining the old data with new)
-ColorSet = varycolor(3);
+ColorSet = varycolor(2);
 set(gca,'ColorOrder',ColorSet);
 hold all;
-for i = 1:3
-    filename = sprintf('Reentry%d.mat',i+2);
+for i = 1:2
+    filename = sprintf('Reentry%d.mat',i+3);
     load(filename)
     plot(t,P);
     %    hold on;
