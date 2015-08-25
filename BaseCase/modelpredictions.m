@@ -18,7 +18,7 @@
 Runforward = {'continue','yearly vector control','yearly vector control with active case-finding','yearly vector control with alternate active case-finding'};
 
 %r = 0.25;
-for s = 2:4
+for s = 1:4
     r = 0.0;
     load initconds
     X(:,4) = (1-r)*22.991;
@@ -59,7 +59,7 @@ for s = 2:4
     end
 
 
-    filename = sprintf('Predictions1%d.mat',s);
+    filename = sprintf('Predictions%d.mat',s);
     save(filename,'t','TotPrev','VP','E1','E2','E3','P1','P2','P3')
     clear all
     Runforward = {'continue','yearly vector control','yearly vector control with active case-finding','yearly vector control with alternate active case-finding','vector-control scale-up 1','vector-control scale-up 2','active case finding scale-down 1','active case finding scale-down 2','yearly vector control with active case-finding scale-up 1','yearly vector control with active case-finding scale-up 2'}
@@ -69,7 +69,7 @@ end
 
 %% Use this part to plot the projections of each strategies
 
-% load Predictions1;
+load Predictions1;
 fig1 = figure('Position',[100,100,1000,500]); % Total prevalences and vector prevalences
 subplot(2,1,1)
 plot(t,TotPrev,'color',[0.5,0.5,0.5])

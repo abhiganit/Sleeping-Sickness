@@ -8,20 +8,20 @@ function[t,y]  = runHATintervention(x,init,intervention,r)
 %% Tsetse Parameters (All rates are in years)
 eta = 365./20;                       % 1/eta: pupae stage duration
 BV = 365*0.05;                       % Tsetse constant birth rate
-muV0 = 365*0.025;                    % Tsetse death rate without competition
+muV0 = 365*0.030;                    % Tsetse death rate without competition
 muV1 = 0.0002;                       % Death rate competition parameters
 sigmaV = 365.;                       % 1/sigmaV: Susceptibility period in Tsetse
 aH = 365*0.075;                      % Tsetse human biting rate
 betaVH = x(1);                       % Tran. prob. from humans to Tsetse
 tauV = 365./25;                      % 1/tauV: incubation period in tsetse
-V = 1634;                             % Tsetse population size (carrying capacity)
+V = 5000;                             % Tsetse population size (carrying capacity)
 
 %% Human Parameters (All rates are in years)
-muH = 1/55;                          % Human natural death rate
+muH = 1/59;                          % Human natural death rate
 betaH = x(2);                        % Trans. prob. from tsetse to humans
 tauH = 365./12;                      % 1/tauH:incubation period in humans
-gammaH1 = 365*0.0019;                % 1/gammaH1: 1st stage infectious period in humans
-gammaH2 = 365*0.0020;                % 1/gammaH2: 2nd stage infectious period in humans
+gammaH1 = 365/526;%*0.0019;                % 1/gammaH1: 1st stage infectious period in humans
+gammaH2 = 365/252; %*0.0020;                % 1/gammaH2: 2nd stage infectious period in humans
 H = 300;                             % Human population size
 
 %% Human Treatment Parameters
@@ -86,14 +86,14 @@ switch(intervention)
     t = vertcat(t,tc0);
     y = vertcat(y,yc0);
     rho = x(4);
-    tint = linspace(3,27,14*360);
+    tint = linspace(3,17,14*360);
     ye0 = yc0(end,:);
     [tc,yc] = ode23s(@HATmodel,tint, ye0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
                 betaVH,tauV,muH,betaH,tauH,gammaH1,gammaH2, ...
                 P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
                 eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
-    % t = vertcat(t,tc);
-    % y = vertcat(y,yc);
+    t = vertcat(t,tc);
+    y = vertcat(y,yc);
     % ye0 = yc(end,:);
     % rho = 0;
     % tint = linspace(8,17,9*360);
