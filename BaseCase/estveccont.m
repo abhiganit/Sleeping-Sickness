@@ -1,7 +1,7 @@
 function[output] = estveccont(x)
 
 
-out = runHATmodel([0.3791    0.5507    0.6988   x]);
+out = runHATmodel([0.1785 0.1547 0.6960  x]);
 Data = [3,2,9.53;
         4,8, 0  ;
         7,13,0  ;

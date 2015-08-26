@@ -1,14 +1,15 @@
 %% Load parameter samples
-Par = [];
-Lik = [];
-N = 3  % No of independent sample runs that I ran
-for i = 1:N
-    filename = sprintf('output%d.mat',i);
-    load(filename)
-    Par = vertcat(Par,params);
-    Lik = horzcat(Lik,Likelihood);
-end
+% Par = [];
+% Lik = [];
+% N = 3  % No of independent sample runs that I ran
+% for i = 1:N
+%     filename = sprintf('output%d.mat',i);
+%     load(filename)
+%     Par = vertcat(Par,params);
+%     Lik = horzcat(Lik,Likelihood);
+% end
 
+load Sample
 %load output1
 Lik = Likelihood;
 Par = params;
@@ -99,9 +100,9 @@ for i = 1:length(A)
      end
 end
 length(B)
-%save('initconds','B','Q','X');
+save('initconds','B','Q','X');
 %[a,b] = max(L);
-out = runHATmodel([bestpar(1:3),22.9924,bestpar(5)]);
+out = runHATmodel([bestpar(1:3),18.1214,bestpar(5)]);
 Best = out{1};
 
 

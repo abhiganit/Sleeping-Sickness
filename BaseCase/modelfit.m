@@ -55,7 +55,7 @@ function[] = modelfit()
         end
     end
     toc
-    save('Sample2','params','Likelihood')
+    save('output7','params','Likelihood')
     c = clock;
     Time = fix(c);
     Time(4:end)

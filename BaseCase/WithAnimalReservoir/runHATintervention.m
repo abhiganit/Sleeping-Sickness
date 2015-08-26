@@ -8,22 +8,22 @@ function[t,y]  = runHATintervention(x,init,intervention,r)
 %% Tsetse Parameters (All rates are in years)
 eta = 365./20;                       % 1/eta: pupae stage duration
 BV = 365*0.05;                       % Tsetse constant birth rate
-muV0 = 365*0.025;                    % Tsetse death rate without competition
+muV0 = 365*0.030;                    % Tsetse death rate without competition
 muV1 = 0.0002;                       % Death rate competition parameters
 sigmaV = 365.;                       % 1/sigmaV: Susceptibility period in Tsetse
-aH = 365*0.075;                      % Tsetse human biting rate
-aL = 365*0.175;                      % Tsetse Livestock biting rate
+aH = 365/3;                      % Tsetse human biting rate
+aL = 365/3;                      % Tsetse Livestock biting rate
 betaVH = x(1);                       % Tran. prob. from humans to
 betaVL = 1-x(1);                      % Tran. prob. from Livestock to Tsetse                                     % Tsetse
 tauV = 365./25;                      % 1/tauV: incubation period in tsetse
-V = 1634;                             % Tsetse population size (carrying capacity)
+V = 5000;                             % Tsetse population size (carrying capacity)
 
 %% Human Parameters (All rates are in years)
-muH = 1/55;                          % Human natural death rate
+muH = 1/59;                          % Human natural death rate
 betaH = x(2);                        % Trans. prob. from tsetse to humans
 tauH = 365./12;                      % 1/tauH:incubation period in humans
-gammaH1 = 365*0.0019;                % 1/gammaH1: 1st stage infectious period in humans
-gammaH2 = 365*0.0020;                % 1/gammaH2: 2nd stage infectious period in humans
+gammaH1 = 365/526; %*0.0019;                % 1/gammaH1: 1st stage infectious period in humans
+gammaH2 = 365/252; %*0.0020;                % 1/gammaH2: 2nd stage infectious period in humans
 H = 300;                             % Human population size
 
 %% Human Treatment Parameters

@@ -1,9 +1,21 @@
 %% Load parameter samples
 %v = 0:0.02:1;
 %for k = 1:length(v)
-load Sample
-Lik = Likelihood;
-Par = params;
+Lik = [];
+Par = [];
+for i = 1:7
+    filename = sprintf('output%d',i);
+    load(filename);
+    Lik = horzcat(Lik,Likelihood);
+    Par = vertcat(Par,params);
+end
+load Sample;
+Lik = horzcat(Lik,Likelihood);
+Par = vertcat(Par,params);
+
+% load Sample
+% Lik = Likelihood;
+% Par = params;
 M = length(Lik) % Total sample size
 Data = [3,2,9.53;
         4,8, 0  ;
@@ -60,7 +72,7 @@ bestpar = Par(nonzeroind(b),:)
 
 %%% Run all of them again with new vector control
 parfor i = 1:length(nonzeroind)
-    out = runHATmodel([Par(nonzeroind(i),1:3),18.1221]);
+    out = runHATmodel([Par(nonzeroind(i),1:3),18.1231]);
     A(i,:) = out{1};
     P(i,:) = out{2};
 end
@@ -103,9 +115,10 @@ length(B)
 
 %end
 
+Xpar = X;
 
 save('initconds','B','Q','X');
-out = runHATmodel([bestpar(1:3),18.1253]);
+out = runHATmodel([bestpar(1:3),18.1231]);
 Best = out{1};
 
 %load initconds;
@@ -168,32 +181,21 @@ ax.XTickLabel = {'2008', '2010','2012',' 2013'}
 box('off')
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 fig2 = figure;
 plot(B(:,9),'o')
 title('Vector Prevalence (2008)')
 
 
+TsetseMedian = median(B(:,9))
+TsetseCI = quantile(B(:,9),[0.025,0.975])
 
 
 
 
 %% Re-sampling based on weights (melding)
 % % Posterior
+%load initconds
+%X = Xpar;%
 
 parfor i = 1:length(B)
     weights(i) = L(i)/sum(L);
@@ -205,7 +207,7 @@ j = 1;
 while j < total+1
     k =randi(length(B),1);
     if(rand <weights(k))
-    posterior(j,:)=X(k,:);
+    posterior(j,:)=Xpar(k,:);
      j = j+1;
     end
 end
@@ -223,4 +225,11 @@ fig3 = figure;
 for i = 1:3
     subplot(3,1,i)
     hist(posterior(:,i),20)
+end
+
+%% Confidence Intervals
+% beta_VH
+for i = 1:3
+    Med(i) = median(posterior(:,i))
+    CI(i,:) = quantile(posterior(:,i),[0.025,0.975])
 end

@@ -11,7 +11,7 @@ BV = 365*0.05;                       % Tsetse constant birth rate
 muV0 = 365*0.030;                    % Tsetse death rate without competition
 muV1 = 0.0002;                       % Death rate competition parameters
 sigmaV = 365.;                       % 1/sigmaV: Susceptibility period in Tsetse
-aH = 365*0.075;                      % Tsetse human biting rate
+aH = 365/3;                          % Tsetse human biting rate
 betaVH = x(1);                       % Tran. prob. from humans to Tsetse
 tauV = 365./25;                      % 1/tauV: incubation period in tsetse
 V = 5000;                             % Tsetse population size (carrying capacity)
@@ -47,7 +47,7 @@ y0 = init;
 % Coverage in year 2013
 
 % active case-finding and treatment
-cov = 0.5808*0.95*0.87;
+cov = 0.53*0.95*0.87;
 y0(10) = y0(10) + cov*(y0(8)+y0(9));
 y0(8) = (1-cov)*y0(8); y0(9) = (1-cov)*y0(9);
 % vector-control
@@ -117,7 +117,7 @@ switch(intervention)
     rho = x(4);
     ye0 = yc0(end,:);
     cov = (1-r)*0.5808*0.95*0.87;
-    for j = 1:24
+    for j = 1:14
         ye0(10) = ye0(10) + cov*(ye0(8)+ye0(9));
         ye0(8) = (1-cov)*ye0(8); ye0(9) = (1-cov)*ye0(9);
         [tl,yl] = ode23s(@HATmodel,tint, ye0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
@@ -151,7 +151,7 @@ switch(intervention)
     tint = linspace(3+20/360,5,2*360-20);
     ye0 = yc0(end,:);
     cov = (1-r)*0.5808*0.95*0.87;
-    for j = 1:14 %4
+    for j = 1:7
         ye0(10) = ye0(10) + cov*(ye0(8)+ye0(9));
         ye0(8) = (1-cov)*ye0(8); ye0(9) = (1-cov)*ye0(9);
         [tl,yl] = ode23s(@HATmodel,tint, ye0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
