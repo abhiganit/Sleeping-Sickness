@@ -6,33 +6,24 @@ function dY = HATmodel(t,Y,eta,BV,muV0,muV1,sigmaV,aH, ...
 
 %% Compartments
 VP = Y(1); VS = Y(2); VE = Y(3); VI = Y(4); VR = Y(5);
-HS = Y(6); HE = Y(7);  HI1 = Y(8); HI2 = Y(9); HR = Y(10);
+HS = Y(6); HE = Y(7);  HI1 = Y(8); HI2 = Y(9); HR = Y(10); HC = Y(11);
 
 V = VS+VE+VI+VR;
 H = HS+HE+HI1+HI2+HR;
 
-% $$$ % If LiveStock is included
-% $$$ if LivStock == 1
-% $$$     LS = Y(12); LE = Y(13); LI = Y(14); LR = Y(15);
-% $$$     L = LS+LE+LI+LR;
-% $$$     lambdaVL = betaVL*LI/L;
-% $$$ else
-% $$$     aL = 0;
-% $$$     lambdaVL = 0;
-% $$$ end
 
-% If vector-control being implemented
+% For vector-control
 if rho == 0
     mr = 0;
 else
-    %    aH = aH*(1-mortality_rate(rho,t,l,m));
     mr = mortality_rate(rho,t,l,m);
 end
 
-
-
+% coverage for stage 1 and stage 11
 phi1 = P1*P1PD*P1TP;
 phi2 = P2*P2PD*P2TP;
+
+% Birth-rate for humans and death rate of tsetse
 BH = muH*H + ((1-phi2)*gammaH2 + phi2*(1-eps2)*p2*zeta2)*HI2;
 muV = muV0*(1+muV1*V);
 
@@ -53,8 +44,9 @@ dHE = aH*betaVH*betaH*VI*HS/H - (tauH+muH)*HE;
 dHI1 = tauH*HE  -(phi1*eps1*zeta1 +(1-phi1)*gammaH1 + muH)*HI1;
 dHI2 = (1-phi1)*gammaH1*HI1 - (phi2*eps2*zeta2  + (1-phi2)*gammaH2 + phi2*(1-eps2)*p2*zeta2 + muH)*HI2;
 dHR = phi1*eps1*zeta1*HI1 + phi2*eps2*zeta2*HI2 -(deltaH+muH)*HR;
+dHC = tauH*HE+(1-phi1)*gammaH1*HI1+phi1*eps1*zeta1*HI1 + phi2*eps2*zeta2*HI2;
 
-dY = vertcat(dVP,dVS,dVE,dVI,dVR,dHS,dHE,dHI1,dHI2,dHR);
+dY = vertcat(dVP,dVS,dVE,dVI,dVR,dHS,dHE,dHI1,dHI2,dHR,dHC);
 
 
 end

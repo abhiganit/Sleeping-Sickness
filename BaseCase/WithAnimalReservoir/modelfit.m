@@ -24,7 +24,7 @@ function[] = modelfit()
     ci2 = quantile(Y,[0.025,0.975]) % S2, 2008
 
 
-    N = 1000000;
+    N = 1300000;
     % N samples from priors
     params = zeros(N,5);
     tic
@@ -52,7 +52,7 @@ function[] = modelfit()
         end
     end
     toc
-    save('Sample','params','Likelihood')
+    save('output9','params','Likelihood')
 
     c = clock;
     Time = fix(c);

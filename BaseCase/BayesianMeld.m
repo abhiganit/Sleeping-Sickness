@@ -52,6 +52,7 @@ parfor i = 1:length(nonzeroind)
     out = runHATmodel(Par(nonzeroind(i),:));
     A(i,:) = out{1};
     P(i,:) = out{2};
+    Inc(i) = out{4};
 end
 
 %% Estimate the best fit for 2008 data
@@ -59,12 +60,13 @@ x = (A(:,1)-(Data(1,1)/SampSize(1,1))).^2;
 y = (A(:,5)-(Data(1,2)/SampSize(1,2))).^2;
 [a,b] = min((x+y))
 
+global bestpar
 bestpar = Par(nonzeroind(b),:)
 
 %%% Next Estimate the vector control
 % Run the model with Par(nonzeroind(b),:)) and estimate data from
 % 2013
-[p,fval] = fminsearch(@estveccont,0.04)
+[mkr,fval] = fminsearch(@estveccont,0.04)
 % p = 22.9910, fval = 1.9531e-06;
 % 0.3791    0.5507    0.6988    0.2296
 
@@ -72,9 +74,10 @@ bestpar = Par(nonzeroind(b),:)
 
 %%% Run all of them again with new vector control
 parfor i = 1:length(nonzeroind)
-    out = runHATmodel([Par(nonzeroind(i),1:3),18.1231]);
+    out = runHATmodel([Par(nonzeroind(i),1:3),mkr]);
     A(i,:) = out{1};
     P(i,:) = out{2};
+    Inc(i) = out{4};
 end
 
 Lik = Lik(nonzeroind);
@@ -100,7 +103,9 @@ for i = 1:length(A)
         out = A(i,:);
         Q(j,:) = P(i,:); % Save respective end points (initial
                          % conditions for predictions)
-        X(j,:) = Par((i),:); % Saving respective parameters (for predictions)
+        X(j,:) = Par((i),:); % Saving respective parameters (for
+                             % predictions)
+        NI(j) = Inc(i);
         L(j) = betapdf(out(1),Data(1,1),SampSize(1,1))* ...
                betapdf(out(4),Data(4,1),SampSize(4,1))*...
                betapdf(out(5),Data(1,2),SampSize(1,2))* ...
@@ -113,14 +118,19 @@ end
 
 length(B)
 
-%end
-
+%% Validation with incidence
+MedNI = median(NI)
+IncCI = quantile(NI,[0.025,0.975])
 Xpar = X;
 
 save('initconds','B','Q','X');
 out = runHATmodel([bestpar(1:3),18.1231]);
 Best = out{1};
-
+BestLik = betapdf(Best(1),Data(1,1),SampSize(1,1))* ...
+       betapdf(Best(4),Data(4,1),SampSize(4,1))*...
+       betapdf(Best(5),Data(1,2),SampSize(1,2))* ...
+       betapdf(Best(8),Data(4,2),SampSize(4,2));% ...
+log(BestLik)
 %load initconds;
 
 %load initconds
@@ -179,6 +189,8 @@ ax = gca;
 ax.XTick = [1,2,3,4]
 ax.XTickLabel = {'2008', '2010','2012',' 2013'}
 box('off')
+
+save('plotbasecase','t','X','Y','Best','bd1','bd2','DS1','DS2','X1','Y1')
 
 
 fig2 = figure;

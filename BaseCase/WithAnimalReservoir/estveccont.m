@@ -1,7 +1,7 @@
 function[output] = estveccont(x)
 
-
-out = runHATmodel([ 0.3717    0.0055    0.5938    x   0.02360]);
+global bestpar
+out = runHATmodel([bestpar(1:3)  x   bestpar(5)]);
 Data = [3,2,9.53;
         4,8, 0  ;
         7,13,0  ;

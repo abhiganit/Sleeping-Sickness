@@ -8,6 +8,7 @@ function dY = HATmodel(t,Y,eta,BV,muV0,muV1,sigmaV,aH,aL, ...
 VP = Y(1); VS = Y(2); VE = Y(3); VI = Y(4); VR = Y(5);
 HS = Y(6); HE = Y(7);  HI1 = Y(8); HI2 = Y(9); HR = Y(10);
 LS = Y(11); LE = Y(12); LI = Y(13); LR = Y(14);
+HC = Y(15);
 
 V = VS+VE+VI+VR;
 H = HS+HE+HI1+HI2+HR;
@@ -57,6 +58,7 @@ dHI1 = tauH*HE  -(phi1*eps1*zeta1 +(1-phi1)*gammaH1 + muH)*HI1;
 dHI2 = (1-phi1)*gammaH1*HI1 - (phi2*eps2*zeta2  + (1-phi2)*gammaH2 + phi2*(1-eps2)*p2*zeta2 + muH)*HI2;
 dHR = phi1*eps1*zeta1*HI1 + phi2*eps2*zeta2*HI2 -(deltaH+muH)*HR;
 
+dHC = tauH*HE + (1-phi1)*gammaH1*HI1 + phi1*eps1*zeta1*HI1 + phi2*eps2*zeta2*HI2;
 
 % Animal Equations
 dLS = deltaL*LR - aL*betaVL*betaL*VI*LS/L ;
@@ -64,6 +66,6 @@ dLE = aL*betaVL*betaL*VI*LS/L - tauL*LE;
 dLI = tauL*LE - gammaL*LI;
 dLR = gammaL*LI-deltaL*LR;
 
-dY = vertcat(dVP,dVS,dVE,dVI,dVR,dHS,dHE,dHI1,dHI2,dHR,dLS,dLE,dLI,dLR);
+dY = vertcat(dVP,dVS,dVE,dVI,dVR,dHS,dHE,dHI1,dHI2,dHR,dLS,dLE,dLI,dLR,dHC);
 
 end

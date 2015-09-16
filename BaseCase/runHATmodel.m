@@ -17,8 +17,8 @@ V = 5000;                             % Tsetse population size (carrying capacit
 muH = 1/59;                          % Human natural death rate
 betaH = x(2);                        % Trans. prob. from tsetse to humans
 tauH = 365./12;                      % 1/tauH:incubation period in humans
-gammaH1 = 365/526;                % 1/gammaH1: 1st stage infectious period in humans
-gammaH2 = 365/252;                % 1/gammaH2: 2nd stage infectious period in humans
+gammaH1 = 365/526;                   % 1/gammaH1: 1st stage infectious period in humans
+gammaH2 = 365/252;                   % 1/gammaH2: 2nd stage infectious period in humans
 H = 300;                             % Human population size
 
 %% Human Treatment Parameters
@@ -46,7 +46,7 @@ m = 0;                               % next m months of linear decline
 
 % Initial conditions
 V0 = [BV*V/eta,0.99*V, 0, 0.01*V,0];   % (Vp,Vs,Ve,Vi,Vr)
-H0 = [H,0,0,0,0];                  % (Hs,He,Hc,Hi1,Hi2,Hr)
+H0 = [H,0,0,0,0,0];                  % (Hs,He,Hi1,Hi2,Hr,Hc)
 y0 = horzcat(V0,H0);
 
 % Time span
@@ -58,10 +58,10 @@ tspan = [0,1000];
                eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
 
 
-S1(1) = (y(end,8))/sum(y(end,6:end)); % 2008
-S2(1) = (y(end,9))/sum(y(end,6:end)); % 2008
+% equilibrium prevalences (2008)
+S1(1) = (y(end,8))/sum(y(end,6:10)); % 2008
+S2(1) = (y(end,9))/sum(y(end,6:10)); % 2008
 V = y(end,4)/sum(y(end,2:5));       % 2008
-
 % In year 2008, there was active surveillance in Boffa East
 % mainland with  coverage= (attendance*sensitivity)
 y01 = y(end,:);
@@ -77,8 +77,8 @@ tspan1 = linspace(0,2,3);  % (2008-2010) Run from dec 2007 (0), dec (2008) (1),
                eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
 
 
-S1(2) =(y1(end,8))/sum(y1(end,6:end)); % 2010
-S2(2) =( y1(end,9))/sum(y1(end,6:end)); % 2010
+S1(2) =(y1(end,8))/sum(y1(end,6:10)); % 2010
+S2(2) =( y1(end,9))/sum(y1(end,6:10)); % 2010
 
 % (2010-2012)
 y02 = y1(end,:);
@@ -93,9 +93,11 @@ tspan2 = linspace(0,2,3); % (2010-2012): Run from dec (2009) (0) to dec (2010) (
                P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
                eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
 
-S1(3) = (y2(end,8))/sum(y2(end,6:end)); % 2012
-S2(3) = (y2(end,9))/sum(y2(end,6:end)); % 2012
+S1(3) = (y2(end,8))/sum(y2(end,6:10)); % 2012
+S2(3) = (y2(end,9))/sum(y2(end,6:10)); % 2012
 VecP = sum(y2(end,2:5));
+Inc1 = y2(end,11);
+
 % year 2012
 rho = x(4);
 l = 3; m = 3;
@@ -112,12 +114,14 @@ tspan3 = linspace(0,1,2); % (2012): Run from dec (2011) (0) to dec (2012) (1)
                P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
                eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
 
-S1(4) = (y3(end,8))/sum(y3(end,6:end)); % 2013
-S2(4) = (y3(end,9))/sum(y3(end,6:end)); % 2013
+S1(4) = (y3(end,8))/sum(y3(end,6:10)); % 2013
+S2(4) = (y3(end,9))/sum(y3(end,6:10)); % 2013
 VecP1 = sum(y3(end,2:5));
+Inc2 = y3(end,11);
 out{1} = horzcat(S1,S2,V);
 out{2} = y3(end,:);
 out{3} = VecP1/VecP;
+out{4} = (Inc2-Inc1)/y2(end,6);
 %toc
 
 end

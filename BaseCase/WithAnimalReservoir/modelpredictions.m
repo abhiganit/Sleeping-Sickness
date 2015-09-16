@@ -14,10 +14,14 @@
 
 
 %% Runforward loops over all the controls and saves data in Predictions%.mat
+c = clock;
+fix(c)
+red = [0,0.25,0.50];
 Runforward = {'continue','yearly vector control','yearly vector control with active case-finding','yearly vector control with alternate active case-finding'}
 for s = 1:4
+    r = 0.0;
     load initconds
-    X(:,4) = 22.9924;
+    X(:,4) = (1-r)*mkr;
     intervention = Runforward{s}
     Y = [];
     for i = 1:length(B)
@@ -36,13 +40,24 @@ for s = 1:4
     Q(Fail,:) = [];
     B(Fail,:) = [];
 
+    for i = 1:length(Y)
+        for j = 1:length(Y{1})
+            if j <= 360
+                inc(j,i) = (Y{i}(j,8)+Y{i}(j,9))*360/Y{i}(j,6);
+            else
+                inc(j,i) = (Y{i}(j,15)-Y{i}(j-360,15))/Y{i}(j-360,6);
+            end
+        end
+    end
+
+
 
     % Calculate total prevalences at each time point till 2030;
     Shai = (cellfun(@(y) (y(:,8)+y(:,9))'./sum(y(:,6:10)'),Y,'UniformOutput',false));
     TotPrev = cell2mat(Shai');
     VP = cell2mat((cellfun(@(y) y(:,4)'./sum(y(:,2:5)'), Y, ...
                            'UniformOutput',false))');
-    LP = cell2mat((cellfun(@(y) y(:,13)'./sum(y(:,11:end)'), Y,'UniformOutput',false))');
+    LP = cell2mat((cellfun(@(y) y(:,13)'./sum(y(:,11:14)'), Y,'UniformOutput',false))');
 
 
     for i = 1:size(TotPrev,2)
@@ -55,10 +70,15 @@ for s = 1:4
         P2(i) = E2(i)/length(Tot);
         P3(i) = E3(i)/length(Tot);
     end
+     if r== 0
+       hmm = s;
+    else
+        hmm = (s+r)*100
+    end
 
 
-    filename = sprintf('Predictions%d.mat',s);
-    save(filename,'t','TotPrev','VP','LP','E1','E2','E3','P1','P2','P3')
+    filename = sprintf('PredictionsA%d.mat',hmm);
+    save(filename,'t','inc','TotPrev','VP','LP','E1','E2','E3','P1','P2','P3')
     clear all
     Runforward = {'continue','yearly vector control','yearly vector control with active case-finding','yearly vector control with alternate active case-finding'}
 end
@@ -97,9 +117,9 @@ ColorSet = varycolor(4);
 set(gca,'ColorOrder',ColorSet);
 hold all;
 for i = 1:4
-    filename = sprintf('Predictions%d.mat',i)
+    filename = sprintf('PredictionsA%d.mat',i)
     load(filename)
-    plot(t,P3,'linewidth',1.5)
+    plot(t,P2,'linewidth',1.5)
     %    hold on;
 end
 title('Probability of elimination as public health problem')
@@ -112,6 +132,34 @@ ax.XTick = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
 ax.XTickLabel = {'2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026','2027','2028','2029','2030'}
 hold off
 box('off')
+
+
+
+ind = [2,3,4]
+j = 1;
+for i = ind
+    filename = sprintf('PredictionsA%d.mat',i)
+    load(filename);
+    [a,b] = min(abs(t-7));
+    ProbMat(j,1) = P2(b)
+    j = j+1;
+end
+j = 1;
+for i = ind
+    filename = sprintf('PredictionsA%d25.mat',i)
+    load(filename);
+    [a,b] = min(abs(t-7));
+    ProbMat(j,2) = P2(b)
+    j = j+1;
+end
+j = 1;
+for i = ind
+    filename = sprintf('PredictionsA%d50.mat',i)
+    load(filename);
+    [a,b] = min(abs(t-7));
+    ProbMat(j,3) = P2(b)
+    j = j+1;
+end
 
 
 % fig3 = figure('Position',[100,100,1200,800]);

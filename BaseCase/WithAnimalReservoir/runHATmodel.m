@@ -57,7 +57,7 @@ m = 0;                               % next m months of linear decline
 % Initial conditions
 V0 = [BV*V/eta,0.99*V, 0, 0.01*V,0];   % (Vp,Vs,Ve,Vi,Vr)
 H0 = [H,0,0,0,0];                  % (Hs,He,Hc,Hi1,Hi2,Hr)
-L0 = [L,0,0,0];
+L0 = [L,0,0,0,0];
 
 y0 = horzcat(V0,H0,L0);
 
@@ -110,7 +110,7 @@ tspan2 = linspace(0,2,3); % (2010-2012): Run from dec (2009) (0) to dec (2010) (
 S1(3) = (y2(end,8))/sum(y2(end,6:10)); % 2012
 S2(3) = (y2(end,9))/sum(y2(end,6:10)); % 2012
 VecP = sum(y2(end,2:5));
-
+Inc1 = y2(end,15);
 % year 2012
 rho = x(4);
 l = 3; m = 3;
@@ -130,9 +130,11 @@ tspan3 = linspace(0,1,2); % (2012): Run from dec (2011) (0) to dec (2012) (1)
 S1(4) = (y3(end,8))/sum(y3(end,6:10)); % 2013
 S2(4) = (y3(end,9))/sum(y3(end,6:10)); % 2013
 VecP1 = sum(y3(end,2:5));
+Inc2 = y3(end,15);
 out{1} = horzcat(S1,S2,V1,L1);
 out{2} = y3(end,:);
 out{3} = VecP1/VecP;
+out{4} = (Inc2-Inc1)/y2(end,6);
 %toc
 
 end

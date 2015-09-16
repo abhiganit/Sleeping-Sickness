@@ -4,7 +4,6 @@ function[t,y]  = runHATintervention(x,init,intervention,r)
 %% Interventions implemented
 
 %tic;
-
 %% Tsetse Parameters (All rates are in years)
 eta = 365./20;                       % 1/eta: pupae stage duration
 BV = 365*0.05;                       % Tsetse constant birth rate
@@ -47,7 +46,7 @@ y0 = init;
 % Coverage in year 2013
 
 % active case-finding and treatment
-cov = 0.53*0.95*0.87;
+cov = 0.53*0.95*0.87*0.93;
 y0(10) = y0(10) + cov*(y0(8)+y0(9));
 y0(8) = (1-cov)*y0(8); y0(9) = (1-cov)*y0(9);
 % vector-control
@@ -86,7 +85,8 @@ switch(intervention)
     t = vertcat(t,tc0);
     y = vertcat(y,yc0);
     rho = x(4);
-    tint = linspace(3,17,14*360);
+    tint = linspace(3,17,14*360);  % To run to 2020 make it
+                                   % (3,7,4*360) and uncomment below.
     ye0 = yc0(end,:);
     [tc,yc] = ode23s(@HATmodel,tint, ye0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
                 betaVH,tauV,muH,betaH,tauH,gammaH1,gammaH2, ...
@@ -94,9 +94,9 @@ switch(intervention)
                 eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
     t = vertcat(t,tc);
     y = vertcat(y,yc);
-    % ye0 = yc(end,:);
+    ye0 = yc(end,:);
     % rho = 0;
-    % tint = linspace(8,17,9*360);
+    % tint = linspace(7,17,10*360);
     % [tc,yc] = ode23s(@HATmodel,tint, ye0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
     %             betaVH,tauV,muH,betaH,tauH,gammaH1,gammaH2, ...
     %             P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
@@ -116,8 +116,9 @@ switch(intervention)
     tint = linspace(3+20/360,4,340);
     rho = x(4);
     ye0 = yc0(end,:);
-    cov = (1-r)*0.5808*0.95*0.87;
-    for j = 1:14
+    cov = (1-r)*0.53*0.95*0.87*0.93;
+    for j = 1:14   % To run till 2020, make it 7 instead of 14 and
+                   % uncomment below (2013-2020).
         ye0(10) = ye0(10) + cov*(ye0(8)+ye0(9));
         ye0(8) = (1-cov)*ye0(8); ye0(9) = (1-cov)*ye0(9);
         [tl,yl] = ode23s(@HATmodel,tint, ye0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
@@ -131,7 +132,7 @@ switch(intervention)
 
     end
     % rho = 0;
-    % tint = linspace(8,17,9*360);
+    % tint = linspace(7,17,10*360);
     % [tc,yc] = ode23s(@HATmodel,tint, ye0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
     %             betaVH,tauV,muH,betaH,tauH,gammaH1,gammaH2, ...
     %             P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
@@ -150,8 +151,8 @@ switch(intervention)
     rho = x(4);
     tint = linspace(3+20/360,5,2*360-20);
     ye0 = yc0(end,:);
-    cov = (1-r)*0.5808*0.95*0.87;
-    for j = 1:7
+    cov = (1-r)*0.53*0.95*0.87*0.93;
+    for j = 1:7 % Make it 2 instead of 7 and uncomment below
         ye0(10) = ye0(10) + cov*(ye0(8)+ye0(9));
         ye0(8) = (1-cov)*ye0(8); ye0(9) = (1-cov)*ye0(9);
         [tl,yl] = ode23s(@HATmodel,tint, ye0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
@@ -165,7 +166,7 @@ switch(intervention)
 
     end
     % rho = 0;
-    % tint = linspace(11,17,6*360);
+    % tint = linspace(7,17,6*360);
     % [tc,yc] = ode23s(@HATmodel,tint, ye0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
     %             betaVH,tauV,muH,betaH,tauH,gammaH1,gammaH2, ...
     %             P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...

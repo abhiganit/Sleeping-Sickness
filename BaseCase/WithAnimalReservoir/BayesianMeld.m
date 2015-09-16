@@ -1,18 +1,22 @@
 %% Load parameter samples
-% Par = [];
-% Lik = [];
-% N = 3  % No of independent sample runs that I ran
-% for i = 1:N
-%     filename = sprintf('output%d.mat',i);
-%     load(filename)
-%     Par = vertcat(Par,params);
-%     Lik = horzcat(Lik,Likelihood);
-% end
-
-load Sample
-%load output1
-Lik = Likelihood;
-Par = params;
+Par = [];
+Lik = [];
+N = 7  % No of independent sample runs that I ran
+for i = 1:N
+    filename = sprintf('output%d.mat',i);
+    load(filename)
+    Par = vertcat(Par,params);
+    Lik = horzcat(Lik,Likelihood);
+end
+for i = 1:5
+    filename = sprintf('Sample%d.mat',i);
+    load(filename)
+    Par = vertcat(Par,params);
+    Lik = horzcat(Lik,Likelihood);
+end
+% %load output1
+% Lik = horzcat(Lik,Likelihood);
+% Par = vertcat(Par,params);
 M = length(Lik) % Total sample size
 Data = [3,2,9.53;
         4,8, 0  ;
@@ -56,20 +60,22 @@ x = (A(:,1)-(Data(1,1)/SampSize(1,1))).^2;
 y = (A(:,5)-(Data(1,2)/SampSize(1,2))).^2;
 [a,b] = min((x+y))
 
+global bestpar
 bestpar = Par(nonzeroind(b),:)
 
 %%% Next Estimate the vector control
 % Run the model with Par(nonzeroind(b),:)) and estimate data from
 % 2013
-[p,fval] = fminsearch(@estveccont,0.04)
-% p = 22.9924, fval = 2.0834e-06
+[mkr,fval] = fminsearch(@estveccont,0.04)
+
 
 
 %%% Run all of them again with new vector control
 parfor i = 1:length(nonzeroind)
-    out = runHATmodel([Par(nonzeroind(i),1:3),22.9924,Par(nonzeroind(i),5)]);
+    out = runHATmodel([Par(nonzeroind(i),1:3),mkr,Par(nonzeroind(i),5)]);
     A(i,:) = out{1};
     P(i,:) = out{2};
+    Inc(i) = out{4};
 end
 
 Lik = Lik(nonzeroind);
@@ -89,7 +95,9 @@ for i = 1:length(A)
         out = A(i,:);
         Q(j,:) = P(i,:); % Save respective end points (initial
                          % conditions for predictions)
-        X(j,:) = Par(i,:); % Saving respective parameters (for predictions)
+        X(j,:) = Par(i,:); % Saving respective parameters (for
+                           % predictions)
+        NI(j) = Inc(i);
         L(j) = betapdf(out(1),Data(1,1),SampSize(1,1))* ...
                betapdf(out(4),Data(4,1),SampSize(4,1))*...
                betapdf(out(5),Data(1,2),SampSize(1,2))* ...
@@ -100,12 +108,25 @@ for i = 1:length(A)
      end
 end
 length(B)
-save('initconds','B','Q','X');
-%[a,b] = max(L);
-out = runHATmodel([bestpar(1:3),18.1214,bestpar(5)]);
+
+%% Validation with incidence
+NewCaseCI = quantile(NI,[0.025,0.975])
+
+Xpar = X;
+save('initconds','B','Q','X','mkr');
+out = runHATmodel([bestpar(1:3),mkr,bestpar(5)]);
 Best = out{1};
+BestLik = betapdf(Best(1),Data(1,1),SampSize(1,1))* ...
+       betapdf(Best(4),Data(4,1),SampSize(4,1))*...
+       betapdf(Best(5),Data(1,2),SampSize(1,2))* ...
+       betapdf(Best(8),Data(4,2),SampSize(4,2));% ...
 
+log(BestLik)
+% Calculate likelihood for best parameters
 
+DS1 = Data(1:1:4,1)./SampSize(1:1:4,1);
+DS2 = Data(1:1:4,2)./SampSize(1:1:4,2);
+bd1 = bnds1(1:1:4,:); bd2 = bnds2(1:1:4,:);
 
 x = 1:4
 [a,b] = min(B(:,1))
@@ -123,38 +144,73 @@ y2 = B(b,5:8)
 X1 = [x,fliplr(x)]
 Y1 = [y1,fliplr(y2)]
 
-
+close all
 t = 1:4;
-fig1 = figure('units','normalized','outerposition',[0 0 1 1])
+fig1 = figure('units','normalized','outerposition',[0 0 1 1]) %figure();
 subplot(1,2,1)
 %plot(t,B(:,1:4),'Color',[0.75,0.75,0.75]);
 fill(X,Y,[0.75,0.75,0.75],'EdgeColor','none')
-box('off')
 hold on;
 plot(t,Best(1:4),'r','linewidth',1);
-errorbar(t,Data(:,1)./SampSize(:,1), bnds1(:,1),bnds1(:,2),'ko', ...
-         'linewidth',1.5)
-box('off')
+errorbar(t,DS1, bd1(:,1),bd1(:,2),'ko','linewidth',1.5)
 ylabel('Prevalence','FontSize',16)
 xlabel('Years','FontSize',16)
+%plot(tdv,DV1,'ko','linewidth',1.5);
 hold off;
 title('Stage I','FontSize',16)
 ax = gca;
 ax.XTick = [1,2,3,4]
 ax.XTickLabel = {'2008', '2010','2012',' 2013'}
+box('off')
 subplot(1,2,2)
 %plot(t,B(:,5:8),'Color',[0.75,0.75,0.75]);
 fill(X1,Y1,[0.75,0.75,0.75],'EdgeColor','none')
 hold on;
 plot(t,Best(5:8),'r','linewidth',1);
-errorbar(t,Data(:,2)./SampSize(:,2), bnds2(:,1),bnds2(:,2),'ko', ...
-         'linewidth',1.5)
+errorbar(t,DS2, bd2(:,1),bd2(:,2),'ko','linewidth',1.5)
+%plot(tdv,DV2,'ko','linewidth',1.5);
 xlabel('Years','FontSize',16)
 hold off;
 title('Stage II','FontSize',16)
 ax = gca;
 ax.XTick = [1,2,3,4]
 ax.XTickLabel = {'2008', '2010','2012',' 2013'}
+box('off')
+
+save('plotNHA','t','X','Y','Best','bd1','bd2','DS1','DS2','X1','Y1')
+
+
+% t = 1:4;
+% fig1 = figure('units','normalized','outerposition',[0 0 1 1])
+% subplot(1,2,1)
+% %plot(t,B(:,1:4),'Color',[0.75,0.75,0.75]);
+% fill(X,Y,[0.75,0.75,0.75],'EdgeColor','none')
+% box('off')
+% hold on;
+% plot(t,Best(1:4),'r','linewidth',1);
+% errorbar(t,Data(:,1)./SampSize(:,1), bnds1(:,1),bnds1(:,2),'ko', ...
+%          'linewidth',1.5)
+% box('off')
+% ylabel('Prevalence','FontSize',16)
+% xlabel('Years','FontSize',16)
+% hold off;
+% title('Stage I','FontSize',16)
+% ax = gca;
+% ax.XTick = [1,2,3,4]
+% ax.XTickLabel = {'2008', '2010','2012',' 2013'}
+% subplot(1,2,2)
+% %plot(t,B(:,5:8),'Color',[0.75,0.75,0.75]);
+% fill(X1,Y1,[0.75,0.75,0.75],'EdgeColor','none')
+% hold on;
+% plot(t,Best(5:8),'r','linewidth',1);
+% errorbar(t,Data(:,2)./SampSize(:,2), bnds2(:,1),bnds2(:,2),'ko', ...
+%          'linewidth',1.5)
+% xlabel('Years','FontSize',16)
+% hold off;
+% title('Stage II','FontSize',16)
+% ax = gca;
+% ax.XTick = [1,2,3,4]
+% ax.XTickLabel = {'2008', '2010','2012',' 2013'}
 
 fig2 = figure;
 plot(B(:,9),'o')
@@ -162,10 +218,14 @@ title('Vector Prevalence (2008)')
 
 fig3 = figure;
 plot(B(:,10),'o')
-title('Vector Prevalence (2008)')
+title('Animal Prevalence (2008)')
 
 
+TsetseMedian = median(B(:,9))
+TsetseCI = quantile(B(:,9),[0.025,0.975])
 
+AnimalMedian = median(B(:,10))
+AnimalCI = quantile(B(:,10),[0.025,0.975])
 
 
 
@@ -181,7 +241,7 @@ j = 1;
 while j < total+1
     k =randi(length(B),1);
     if(rand <weights(k))
-    posterior(j,:)=X(k,:);
+    posterior(j,:)=Xpar(k,:);
      j = j+1;
     end
 end
@@ -199,4 +259,10 @@ fig3 = figure;
 for i = 1:5
     subplot(5,1,i)
     hist(posterior(:,i),20)
+end
+
+
+for i = 1:5
+    Med(i) = median(posterior(:,i))
+    CI(i,:) = quantile(posterior(:,i),[0.025,0.975])
 end

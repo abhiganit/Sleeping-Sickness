@@ -14,12 +14,12 @@
 
 
 %% Runforward loops over all the controls and saves data in Predictions%.mat
-
+c = clock;
+fix(c)
+red = [0,0.25,0.50];
 Runforward = {'continue','yearly vector control','yearly vector control with active case-finding','yearly vector control with alternate active case-finding'};
-s = 1
-%r = 0.25;
-for s = 2
-    r = 0.0;
+for s = 1:4
+    r = 0.50; % Percentage reduction in maximal kill rate.
     load initconds
     X(:,4) = (1-r)*18.1231;
     intervention = Runforward{s}
@@ -40,19 +40,21 @@ for s = 2
     Q(Fail,:) = [];
     B(Fail,:) = [];
 
+    for i = 1:length(Y)
+        for j = 1:length(Y{1})
+            if j <= 360
+                inc(j,i) = (Y{i}(j,8)+Y{i}(j,9))*360/Y{i}(j,6);
+            else
+                inc(j,i) = (Y{i}(j,11)-Y{i}(j-360,11))/Y{i}(j-360,6);
+            end
+        end
+    end
+
 
     % Calculate total prevalences at each time point till 2030;
     Shai = (cellfun(@(y) (y(:,8)+y(:,9)+y(:,10))'./sum(y(:,6:end)'),Y,'UniformOutput',false));
     TotPrev = cell2mat(Shai');
 
-    CumPrev = cumsum(TotPrev);
-    for i = 1:length(TotPrev)
-        if i <= 360
-        TotPrev(i) = CumPrev(i)-CumPrev(1);
-        else
-            TotPrev(i) = CumPrev(i) - CumPrev(i-360);
-        end
-    end
 
 
 
@@ -60,7 +62,7 @@ for s = 2
 
 
     for i = 1:size(TotPrev,2)
-        Tot = TotPrev(:,i);
+        Tot = inc(i,:);
         E1(i) = length(Tot(1000000*Tot<1)); % Eradication criteria
         E2(i) = length(Tot(10000*Tot<1)); % Elimination as public
                                           % health c   riteria
@@ -69,32 +71,36 @@ for s = 2
         P2(i) = E2(i)/length(Tot);
         P3(i) = E3(i)/length(Tot);
     end
-
-
-    filename = sprintf('Predictions%d.mat',s);
-    save(filename,'t','TotPrev','VP','E1','E2','E3','P1','P2','P3')
+    if r== 0
+       hmm = s;
+    else
+        hmm = (s+r)*100
+    end
+    filename = sprintf('Predictions%d.mat',hmm);
+    save(filename,'t','inc','TotPrev','VP','E1','E2','E3','P1','P2','P3')
     clear all
     Runforward = {'continue','yearly vector control','yearly vector control with active case-finding','yearly vector control with alternate active case-finding'}
 end
 
 
 
+
 %% Use this part to plot the projections of each strategies
 
-load Predictions2;
-fig1 = figure('Position',[100,100,1000,500]); % Total prevalences and vector prevalences
-subplot(2,1,1)
-plot(t,TotPrev,'color',[0.5,0.5,0.5])
-title('HAT prevalences')
-ax = gca;
-ax.XTick = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
-ax.XTickLabel = {'2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026','2027','2028','2029','2030'}
-subplot(2,1,2)
-plot(t(),VP,'color',[0.5,0.5,0.5])
-title('Vector prevalences')
-ax = gca;
-ax.XTick = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17];
-ax.XTickLabel = {'2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026','2027','2028','2029','2030'}
+% load Predictions2;
+% fig1 = figure('Position',[100,100,1000,500]); % Total prevalences and vector prevalences
+% subplot(2,1,1)
+% plot(t,inc,'color',[0.5,0.5,0.5])
+% title('HAT prevalences')
+% ax = gca;
+% ax.XTick = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
+% ax.XTickLabel = {'2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026','2027','2028','2029','2030'}
+% subplot(2,1,2)
+% plot(t(),VP,'color',[0.5,0.5,0.5])
+% title('Vector prevalences')
+% ax = gca;
+% ax.XTick = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17];
+% ax.XTickLabel = {'2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026','2027','2028','2029','2030'}
 
 
 
@@ -103,17 +109,17 @@ ax.XTickLabel = {'2013','2014','2015','2016','2017','2018','2019','2020','2021',
 % 128,205,193
 % 1,133,113]/255
 
+%% Fig 3: Plot probabilities of elimination
+fig3 = figure('units','normalized','outerposition',[0 0 1 1]) %figure('Position',[100,100,1200,800]);
 P = [230,97,1
 253,184,99
 178,171,210
 94,60,153]/255;
-%% Fig 3: Plot probabilities of elimination
-fig3 = figure('units','normalized','outerposition',[0 0 1 1]) %figure('Position',[100,100,1200,800]);
 ColorSet = varycolor(4);
 set(gca,'ColorOrder',ColorSet);
 hold all;
 for i = 1:4
-    filename = sprintf('Predictions%d.mat',i)
+    filename = sprintf('Predictions%d50.mat',i)
     load(filename)
     plot(t,P2,'linewidth',1.5,'Color',P(i,:))
       hold on;
@@ -133,30 +139,32 @@ box('off')
 
 %% Fig 4: Plot barchart for prob. of elim. before 2020
 
+
 % ind1 = [2,6,7]; ind2 = [3,8,9]; ind3 = [4,10,11];
 % %ind = vertcat(ind1,ind2,ind3);
-% ProbMat = zeros(3,3);
-% j = 1;
-% for i = ind1
-%     filename = sprintf('Predictions%d.mat',i)
-%     load(filename);
-%     [a,b] = min(abs(t-8));
-%     ProbMat(j,1) = P2(b);
-%     j = j+1;
-% end
-% j = 1;
-% for i = ind2
-%     filename = sprintf('Predictions%d.mat',i)
-%     load(filename);
-%     [a,b] = min(abs(t-8));
-%     ProbMat(j,2) = P2(b);
-%     j = j+1;
-% end
-% j = 1;
-% for i = ind3
-%     filename = sprintf('Predictions%d.mat',i)
-%     load(filename);
-%     [a,b] = min(abs(t-8));
-%     ProbMat(j,3) = P2(b);
-%     j = j+1;
-% end
+
+ind = [2,3,4]
+j = 1;
+for i = ind
+    filename = sprintf('Predictions%d.mat',i)
+    load(filename);
+    [a,b] = min(abs(t-7));
+    ProbMat(j,1) = P2(b)
+    j = j+1;
+end
+j = 1;
+for i = ind
+    filename = sprintf('Predictions%d25.mat',i)
+    load(filename);
+    [a,b] = min(abs(t-7));
+    ProbMat(j,2) = P2(b)
+    j = j+1;
+end
+j = 1;
+for i = ind
+    filename = sprintf('Predictions%d50.mat',i)
+    load(filename);
+    [a,b] = min(abs(t-7));
+    ProbMat(j,3) = P2(b)
+    j = j+1;
+end

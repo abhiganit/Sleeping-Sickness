@@ -1,7 +1,7 @@
 function[output] = estveccont(x)
 
-
-out = runHATmodel([0.1785 0.1547 0.6960  x]);
+global bestpar
+out = runHATmodel([bestpar(1:3)  x]);
 Data = [3,2,9.53;
         4,8, 0  ;
         7,13,0  ;
@@ -16,4 +16,5 @@ SampSize = [1488,1488,1634;
 % y = (A(1,8)-(Data(4,2)/SampSize(4,2))).^2;
 %output = x+y;
 
-output = abs(out{3}-0.5);
+output = abs(out{3}-0.5); % change this from 0.5 to the acurate
+                          % value ~ 0.6

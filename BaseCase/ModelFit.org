@@ -9,72 +9,57 @@
 
 
 
-* Model Parameters
-  We will estimate three parameters: the transmission probability from
-  humans to tsetse $\beta_{VH}$, the transmission probability from
-  tsetse to humans $\beta_H$ and rate of seeking treatment for stage
-  II patients $\zeta_2$. The rest of parameters will either be fixed
-  or be sampled from their distribution ($\eta$,$gamma_{H_i}$, and $P_{i+/D}$.)
-   + */Tsetse/*
-
-
-     | Parameter    | Definition                                 | Value           | Distribution | Reference        | To be estimated ? |
-     |--------------+--------------------------------------------+-----------------+--------------+------------------+-------------------|
-     | $1/\eta$     | Duration of pupae stage in tsetse          |                 | $20-40 ~d$   | [[https://paperpile.com/shared/c3Tolh][Rock et al. 2015]] |                   |
-     | $B_V$        | Tsetse constant birth rate                 | $0.05 ~d^{-1}$  |              | [[https://paperpile.com/shared/YCjv50][Rogers 1988]]      |                   |
-     | $\mu_{V_0}$  | Tsetse death rate without competition      | $0.025 ~d^{-1}$ |              | [[https://paperpile.com/shared/YCjv50][Rogers 1988]]      |                   |
-     | $\mu_{V_1}$  | Death rate competition parameter           | $0.0002$        |              | Assumed          |                   |
-     | $1/\sigma_V$ | Susceptibility period in tsetse            | $1 ~d$          |              | [[https://paperpile.com/shared/YCjv50][Rogers 1988]]      |                   |
-     | $a_H$        | Tsetse human biting rate                   | $0.075 ~d^{-1}$ |              | [[https://paperpile.com/shared/YCjv50][Rogers 1988]]      |                   |
-     | $\beta_{VH}$ | Trans. prob. from humans to tsetse         | $0.065$         |              | [[https://paperpile.com/shared/YCjv50][Rogers 1988]]      | Yes               |
-     | $1/\tau_V$   | Incubation period in tsetse                | $25 ~d$         |              | [[https://paperpile.com/shared/YCjv50][Rogers 1988]]      |                   |
-     | V            | Tsetse population size (carrying capacity) | $5000$          |              | Assumed          |                   |
-
-   + */Human/*
-
-     | Parameter        | Definition                                    | Value         | Distribution   | Reference           | To be estimated ? |
-     |------------------+-----------------------------------------------+---------------+----------------+---------------------+-------------------|
-     | $\mu_H$          | Human constant death rate                     | $1/55~y^{-1}$ |                | Google (to update)  |                   |
-     | $\beta_H$        | Trans. prob. from tsetse to humans            | $0.62$        |                | [[https://paperpile.com/shared/YCjv50][Rogers 1988]]         |      Yes          |
-     | $1/\tau_H$       | Incubation period in humans                   | $12 ~d$       |                | [[https://paperpile.com/shared/YCjv50][Rogers 1988]]         |                   |
-     | $1/\gamma_{H_1}$ | Stage I infectious period without treatment   |               | $0.98-2.28 ~y$ | [[https://paperpile.com/shared/jz7HRk][Checchi et al. 2008]] |                   |
-     | $1/\gamma_{H_2}$ | Stage II infectious period  without treatment |               | $0.95-2.11 ~y$ | [[https://paperpile.com/shared/jz7HRk][Checchi et al. 2008]] |                   |
-     | H                | Human population size                         | $300$         |                | Assumed             |                   |
-
-
-   + */Treatment/*
-
-     | Parameter    | Definition                                                                                              | Value   | Distribution | Reference                   | To be estimated ? |
-     |--------------+---------------------------------------------------------------------------------------------------------+---------+-------------+-----------------------------+-------------------|
-     | $P_1$        | Probability a stage I individual gets a CATT test                                                       | $0$     |             |                             |                   |
-     | $P_{1+/D}$   | Probability a stage I individual gets a positive CATT and positive parasitology test                    |         | $0.87-0.98$ | [[https://paperpile.com/shared/ea9YR0][Brun et al. 2010]]            |                   |
-     | $P_{1T/+}$   | Probability a stage I individual gets treated upon getting positive CATT and positive parasitology test | $1$     |             | Data                        |                   |
-     | $P_2$        | Probability a stage I individual gets a CATT test                                                       | $1$     |             |                             |                   |
-     | $P_{2+/D}$   | Probability a stage I individual gets a positive CATT and positive parasitology test                    |         | $0.87-0.98$ | [[https://paperpile.com/shared/ea9YR0][Brun et al. 2010]]            |                   |
-     | $P_{2T/+}$   | Probability a stage I individual gets treated upon getting positive CATT and positive parasitology test | $1$     |             | Data                        |                   |
-     | $\epsilon_1$ | Efficacy of stage I treatment (pentamidine)                                                             | $0.94$  |             | [[https://paperpile.com/shared/mTj51B][Doua et al. 1996]]            |                   |
-     | $\epsilon_2$ | Efficacy of stage II treatment (nifurtimox-eflornithine)                                                | $0.965$ |             | [[https://paperpile.com/shared/cTV6IV][Priotto et al. 2009]]         |                   |
-     | $1/\zeta_1$  | Treatment period for stage I patients                                                                   |         |             | Does not matter for fitting |                   |
-     | $1/\zeta_2$  | Treatment period for stage II patients                                                                  |         |             |                             |  Yes              |
-     | $p_2$        | Probability of death due to stage II treatment failure (nifurtimox-eflornithine)                        | $0.007$ |             | [[https://paperpile.com/shared/cTV6IV][Priotto et al. 2009]]         |                   |
-     | $1/\delta_H$ | Immune period in Humans after treatment                                                                 | $50 ~d$ |             | [[https://paperpile.com/shared/YCjv50][Rogers 1988]]                 |                   |
 
 
 
-* Priors
-  | Parameter    | Prior         |
-  |--------------+---------------|
-  | $\beta_{VH}$ | $U(0,\infty)$ |
-  | $\beta_{H}$  | $U(0,\infty)$ |
-  | $1/\zeta_2$  | $U(0,\infty)$ |
+* Base case
+  + Sample Size = 792
+  + Best Par = [0.1785    0.1547    0.6960    0.7725]
+  + Maximal Kill Rate = 18.1231/18.1224
+  + Sub Sample Size = 404
+  + 2013 Incidence range = 0.0014 (0.0006,0.0020)
+  + Loglik = 26.5547
+  + AIC = -47.1094
+  + Tsetse Prevalence = 0.0000549(0.000018,0.000183)
+  + Parameters
+    | \beta_{VH} | 0.1780 (0.1018,0.5942) |
+    | \beta_{H}  | 0.1555 (0.0140,0.4761) |
+    | \zeta      | 0.5978 (0.3283,0.6960) |
+  + Prob. of Elimination by 2020
+    | Control  | 0 |     25 |     50 |
+    | VC       | 1 | 0.7886 | 0.1318 |
+    | VC + AC  | 1 |      1 | 0.6368 |
+    | VC + BAC | 1 |      1 | 0.3333 |
+  + Years to Eradication
+    | Control  |    0 |   25 |   50 |
+    | VC       | 2023 | 2025 | 2030 |
+    | VC + AC  | 2020 | 2021 | 2025 |
+    | VC + BAC | 2021 | 2023 | 2027 |
 
 
-* Likelihood
+* With Animal Reservoir
+  + Sample Size = 171
+  + Best Par = [0.1502    0.1949    0.6430    0.3524    0.0041]
+  + Maximal Kill Rate = 18.1257
+  + Sub Sample Size = 105
+  + 2013 Incidence range = 0.0014 (0.0008,0.0020)
+  + Loglik = 26.5778
+  + AIC = -45.1556
+  + Tsetse Prevalence = 0.00035 (0.0001,0.0085)
+  + Animal Prevalence = 0.0000923 (0.0000087,0.0063)
+  + Parameters
+    | \beta_{VH} | 0.2088 (0.1341,0.4919) |
+    | \beta_{H}  | 0.0084 (0.0003,0.1949)  |
+    | \zeta      | 0.4298 (0.2565,0.6430)  |
+    | \beta_{VL} | 0.0159 (0.0041,0.0583)  |
 
-
-What if we assume that as a result of vector control, the contact
-decreased by 58% and it happened in linear fashion. Now, we assume
-that in the absence of vector control the contact goes back to same
-value again linearly in one year time if vector control is not
-continued, whereas if it is continued then it remains at reduced value
-for as long as it is continued.
+  + Prob. of Elimination by 2020
+    | Control  | 0 | 25 |     50 |
+    | VC       | 1 |  1 | 0.9375 |
+    | VC + AC  | 1 |  1 | 0.9896 |
+    | VC + BAC | 1 |  1 | 0.9896 |
+  + Years to Eradication
+    | Control  |    0 |   25 |   50 |
+    | VC       | 2021 | 2023 | 2028 |
+    | VC + AC  | 2019 | 2020 | 2021 |
+    | VC + BAC | 2020 | 2021 | 2022 |
