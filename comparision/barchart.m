@@ -1,6 +1,5 @@
 
 %% Fig 4: Plot barchart for prob. of elim. before 2020
-
 P1 = [1.0000    0.8228    0.0098
             1.0000    1.0000    0.6206
             1.0000    1.0000    0.1596]; % Updated base-case
@@ -8,8 +7,6 @@ P1 = [1.0000    0.8228    0.0098
 P2 = [0.7693 0.6668 0.4910
       0.9832 0.8092 0.5340
       0.8943 0.7491 0.5340]; % Updated NHA
-
-
 
 E1 = [0     0     0
       0     0     0
@@ -19,9 +16,7 @@ E2 = [0.0088         0         0
     0.3158    0.0439         0
     0.0965    0.0263         0];
 
-
-
-
+# Close all figures
 close all
 fig4 = figure('units','normalized','outerposition',[0 0 1 1])
 subplot(2,1,1)
@@ -52,9 +47,6 @@ ax.XTickLabel = {'Annual vector control',...
 a = get(gca,'TickLabel')
 set(gca,'TickLabel',a,'FontSize',12)
 fix_xticklabels(gca,0.1,{'FontSize',14});
-
-
-
 
 close all
 fig5 = figure('units','normalized','outerposition',[0 0 1 0.8])
