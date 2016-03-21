@@ -1,0 +1,56 @@
+
+#+OPTIONS:   H:4 toc:t num:2
+#+PROPERTY:  padline no
+#+LATEX_HEADER:\usepackage{amsmath}
+#+LATEX_HEADER: \newcommand{\md}{\mathrm{d}}
+#+TITLE: Model Fit
+
+
+
+
+* Base case
+  + Sample Size = 411
+  + Best Par = [0.3909 0.1612 0.6503 0.5468]
+  + Maximal Kill Rate = 18.1230
+  + Sub Sample Size = 226
+  + 2013 Incidence range = 0.0015 (0.0007,0.0020)
+  + Loglik = 26.5076
+  + AIC = -47.1052
+  + Tsetse Prevalence = 0.000018 (0.000010,0.000042)
+  + Parameters
+    | \beta_{VH} | 0.3750 (0.1698,0.5626) |
+    | \beta_{H}  | 0.1751 (0.0778,0.8550) |
+    | \zeta      | 0.5529 (0.2812,0.6950) |
+  + Prob. of Elimination by 2020
+    | Control  | 0 |     25 |     50 |
+    | VC       | 1 | 0.8228 | 0.0098 |
+    | VC + AC  | 1 |      1 | 0.6206 |
+    | VC + BAC | 1 |      1 | 0.1596 |
+  + Years to Eradication
+    | Control  |    0 |   25 |   50 |
+    | VC       | 2023 | 2025 | 2030 |
+    | VC + AC  | 2020 | 2022 | 2025 |
+    | VC + BAC | 2021 | 2023 | 2027 |
+
+
+* With Animal Reservoir
+  + Sample Size = 705
+  + Best Par = [0.3934    0.0416    0.6022    0.5069    0.1132]
+  + Maximal Kill Rate = 18.1211
+  + Sub Sample Size = 259
+  + 2013 Incidence range = 0.0017 (0.0006,0.0021)
+  + Loglik = 26.2320
+  + AIC = -44.4639
+  + Tsetse Prevalence = 0.00084 (0.00001,0.0045)
+  + Animal Prevalence = 0.0032 (0.000004,0.0098)
+  + Parameters
+    | \beta_{VH} | 0.3508 (0.1021,0.5932)  |
+    | \beta_{H}  | 0.0077 (0.0011,0.4439)  |
+    | \zeta      | 0.5793 (0.2544,0.6965)  |
+    | \beta_{VL} | 0.1345 (0.0315,0.6951)  |
+
+  + Prob. of Elimination by 2020
+    | Control  |      0 |     25 |     50 |
+    | VC       | 0.7693 | 0.6668 | 0.4910 |
+    | VC + AC  | 0.9832 | 0.8092 | 0.5340 |
+    | VC + BAC | 0.8943 | 0.7491 | 0.5340 |
