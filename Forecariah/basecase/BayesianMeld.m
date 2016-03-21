@@ -3,12 +3,12 @@
 %for k = 1:length(v)
 Lik = [];
 Par = [];
-for i = 5:7
-    filename = sprintf('output%d',i);
-    load(filename);
-    Lik = horzcat(Lik,Likelihood);
-    Par = vertcat(Par,params);
-end
+% for i = 5:7
+%     filename = sprintf('output%d',i);
+%     load(filename);
+%     Lik = horzcat(Lik,Likelihood);
+%     Par = vertcat(Par,params);
+% end
 % load Sample;
 % load output7
 % Lik = horzcat(Lik,Likelihood);
