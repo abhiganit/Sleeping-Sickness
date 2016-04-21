@@ -25,28 +25,28 @@ phi2 = P2*P2PD*P2TP;
 
 % Birth-rate for humans and death rate of tsetse
 BH = muH*H + ((1-phi2)*gammaH2 + phi2*(1-eps2)*p2*zeta2)*HI2;
-muV = muV0*(1+muV1*V);
+muV = BV;
 
 lambdaVH = betaVH*(HI1+k*HA)/H;
 
 %% Model equations:
 
 % Tsetsi Equations
-dVS = BV*V - (aH+ sigmaV + muV+mr)*VS;
+dVS = BV - (aH+ sigmaV + muV+mr)*VS;
 dVE = (aH*lambdaVH)*VS - (tauV+muV+mr)*VE;
 dVI = tauV*VE - (muV+mr)*VI;
 dVR = (aH*(1-lambdaVH)+sigmaV)*VS -(muV+mr)*VR;
 
 % Human Equations
-dHS = BH + deltaH*HR - aH*betaH*VI*HS/H - muH*HS;
-dHE = aH*betaH*VI*HS/H - (tauH+muH)*HE;
+dHS = BH + deltaH*HR - aH*betaH*VI*HS - muH*HS;
+dHE = aH*betaH*VI*HS - (tauH+muH)*HE;
 dHI1 = nuH*tauH*HE  -(gammaH1 + muH)*HI1;
 dHA  = (1-nuH)*tauH*HE - (gammaH1*gammaH2/(gammaH1+gammaH2))*HA -muH*HA;
 dHI2 = gammaH1*HI1 - (phi2*eps2*zeta2  + (1-phi2)*gammaH2 + phi2*(1-eps2)*p2*zeta2 + muH)*HI2;
-dHR =  phi2*eps2*zeta2*HI2 -(deltaH+muH)*HR;
+dHR =  phi2*eps2*zeta2*HI2 + (gammaH1*gammaH2/(gammaH1+gammaH2))*HA-(deltaH+muH)*HR;
 dHC = phi2*eps2*zeta2*HI2;
 
-dY = vertcat(dVS,dVE,dVI,dVR,dHS,dHE,dHA,dHI1,dHI2,dHR,dHC);
+dY = vertcat(dVS,dVE,dVI,dVR,dHS,dHE,dHI1,dHA,dHI2,dHR,dHC);
 
 
 end
