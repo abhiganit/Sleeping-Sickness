@@ -1,4 +1,4 @@
-function[Loglik]  = runHATmodel(x,Data)
+function[out]  = runHATmodel(x,Data,CIA)
 
 %tic;
 %global Data
@@ -81,14 +81,12 @@ VI = B3*(C1+k*C2)*HE;
 VR = 1-(VS+VE+VI);
 
 if H <= HS || VE+VI > 0.01
-    Loglik = -Inf;
-    return 
+    out = {NaN*ones(1,length(Data(:,2))),NaN*ones(1,length(Data(:,2))),NaN*ones(1,length(Data(:,2))),[-Inf]};
+    return
 end
 % Initial conditions
 V0 = [VS,VE,VI,VR];
 H0 = [HS,HE,HI1,HA,HI2,HR,0];
-% V0 = [BV*V/eta,0.99*V, 0, 0.01*V,0];   % (Vp,Vs,Ve,Vi,Vr)
-% H0 = [H,0,0,0,0,0];                  % (Hs,He,Hi1,Hi2,Hr,Hc)
 y0 = horzcat(V0,H0);
 
 
@@ -97,28 +95,29 @@ y0 = horzcat(V0,H0);
 tspan = [0,1];
 %tspan = linspace(0,1,365);
 % ODE solver (solve model to equilibrium)
-scal = Data(1,2);
-T = []; Y = [];
-for i = 1:4
-    [t,y] = ode45(@HATmodel,tspan, y0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
-               betaVH,tauV,k,nuH,muH,betaH,tauH,gammaH1,gammaH2, ...
-               P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
-               eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
-    tspan = [i+(1/25),i+1];
-    y0 = y(end,:);
-    y0(10) = y0(10) + scal*P1PD*(y0(7)+y0(9));
-    y0(7) = y0(7) - scal*P1PD*y0(7);
-    y0(9) = y0(9) - scal*P1PD*y0(9);
-    y0(11) =0;
-    T = vertcat(T,t);
-    Y = vertcat(Y,y);
-end
+% %scal = Data(1,2);
+% T = []; Y = [];
+% for i = 1:10
+%     [t,y] = ode45(@HATmodel,tspan, y0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
+%                betaVH,tauV,k,nuH,muH,betaH,tauH,gammaH1,gammaH2, ...
+%                P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
+%                eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
+%     tspan = [i+(1/25),i+1];
+%     y0 = y(end,:);
+%     y0(10) = y0(10) + Data(1,2)*(1-exp(-scal*(y0(7)+y(9))))*P1PD*(y0(7)+y0(9));
+%     y0(7) = y0(7) - Data(1,2)*(1-exp(-scal*(y0(7)+y(9))))*P1PD*y0(7);
+%     y0(9) = y0(9) - Data(1,2)*(1-exp(-scal*(y0(7)+y(9))))*P1PD*y0(9);
+%     y0(11) =0;
+%     T = vertcat(T,t);
+%     Y = vertcat(Y,y);
+% end
 %plot(T,Y)
 
 
 tspan = [0,1];
+ms = 1;
 
-for i = 1:12
+for i = 1:length(Data(:,2))
     [t,y] = ode45(@HATmodel,tspan, y0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
                betaVH,tauV,k,nuH,muH,betaH,tauH,gammaH1,gammaH2, ...
                P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
@@ -126,10 +125,11 @@ for i = 1:12
     tspan = [i+(1/25),i+1];
     out{1}(i) = y(end,end);
     y0 = y(end,:);
-    y0(10) = y0(10) + Data(i,2)*P1PD*(y0(7)+y0(9));
-    y0(7) = y0(7) - Data(i,2)*P1PD*y0(7);
-    y0(9) = y0(9) - Data(i,2)*P1PD*y0(9);
-    out{2}(i) = Data(i,2)*P1PD*(y0(7)+y0(9));
+    y0(10) = y0(10) +  (Data(i,2)^scal)*P1PD*(y0(7)+ms*y0(9));
+    y0(7) = y0(7) -  (Data(i,2)^scal)*P1PD*y0(7);
+    y0(9) = y0(9) - (Data(i,2)^scal)*P1PD*ms*y0(9);
+    out{2}(i) = (Data(i,2)^scal)*P1PD*(y0(7)+ms*y0(9));
+
     y0(11) =0;
     x1 = Data(i,3);
     n1 = Data(i,2)*sum(H0);
@@ -138,13 +138,20 @@ for i = 1:12
     n2 = sum(H0);
     pr2 = out{1}(i)/Data(1,5);
 
-    out{3}(i) = log(binopdf(x1,ceil(n1),pr1))+log(binopdf(x2,ceil(n2),pr2));
-    %out{3}(i) = log(poisspdf(x1, out{2}(i)))+log(poisspdf(x2, out{1}(i)));
-    % out{3}(i) = (binopdf(x1,ceil(n1),pr1))*(binopdf(x2,ceil(n2),pr2));
-  
-
+    if Data(i,1) <=2006
+        if isnan(CIA(i,1))==1 || isnan(CIA(i,2))==1 || CIA(i,2)==0
+            out{3}(i) = log(poisspdf(x1, out{2}(i)))+log(poisspdf(x2, out{1}(i)));
+        elseif out{2}(i) >= CIA(i,1) && out{2}(i) <=CIA(i,2)
+            out{3}(i) = log(poisspdf(x1, out{2}(i)))+log(poisspdf(x2, out{1}(i)));
+        else
+            out{3}(i) = -inf;
+        end
+    end
+    %    out{3}(i) = (binopdf(x1,ceil(n1),pr1))*(binopdf(x2,ceil(n2),pr2));
 end
 
-Loglik =  sum(out{3});
+out{4} =  sum(out{3});
+
+
 
 end
