@@ -61,7 +61,7 @@ C2 = (1-nuH)*tauH/((gammaH1*gammaH2/(gammaH1+gammaH2))+muH);
 C3 = gammaH1*C1/(phi2*eps2*zeta2  + (1-phi2)*gammaH2 + phi2*(1- ...
                                                   eps2)*p2*zeta2 + ...
               muH) ;
-C4 = phi2*eps2*zeta2*C3/(deltaH+muH);
+C4 = phi2*eps2*zeta2*C3/(deltaH+muH) + ((gammaH1*gammaH2)/(gammaH1+gammaH2))*C2/(deltaH+muH);
 % C5 = (gammaH1*gammaH2/(gammaH1+gammaH2))/(deltaH+muH);
 % C6 = betaVH/H;
 % C7 = (tauH+muH)/(aH*betaH);

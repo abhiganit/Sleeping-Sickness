@@ -10,7 +10,7 @@ Data = xlsread('DRCdatasheet',name); % Year/Active coverage/New
       CIA(i,:) = quantile(X,[0,1]);
  end
 
-N = 200000  ;
+N = 200000
 parfor j = 1:N
     betaVH = 10*rand;  %5*rand;
     nuH = 0.1 + 0.8*rand;
