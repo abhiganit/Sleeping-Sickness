@@ -43,7 +43,7 @@ dHE = aH*betaH*VI*HS - (tauH+muH)*HE;
 dHI1 = nuH*tauH*HE  -(gammaH1 + muH)*HI1;
 dHA  = (1-nuH)*tauH*HE - gammaH1*HA -muH*HA;
 dHI2 = gammaH1*(HI1+HA) - (phi2*eps2*zeta2  + (1-phi2)*gammaH2 + phi2*(1-eps2)*p2*zeta2 + muH)*HI2;
-dHR =  phi2*eps2*zeta2*HI2 + (gammaH1*gammaH2/(gammaH1+gammaH2))*HA-(deltaH+muH)*HR;
+dHR =  phi2*eps2*zeta2*HI2 -(deltaH+muH)*HR;
 dHC = phi2*eps2*zeta2*HI2;
 
 dY = vertcat(dVS,dVE,dVI,dVR,dHS,dHE,dHI1,dHA,dHI2,dHR,dHC);
