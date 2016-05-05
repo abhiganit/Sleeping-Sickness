@@ -33,8 +33,8 @@ while (iterate<total)
         prior1 = calcprior(theta1);
         out = runHATmodel(theta1,Data,CIA);
         LogLik1 = out{4};
-        if (LogLik1 ~= -inf)
-            ratio = exp(theta1-theta0); %theta1/theta0;
+        if (LogLik1 ~= -inf) || (prior1~=0)
+            ratio = exp(LogLik1-LogLik0); %theta1/theta0;
             if rand < ratio
                 accept = accept + 1;
                 theta0 = theta1;

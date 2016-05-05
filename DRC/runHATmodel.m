@@ -90,30 +90,6 @@ H0 = [HS,HE,HI1,HA,HI2,HR,0];
 y0 = horzcat(V0,H0);
 
 
-
-% Time span
-tspan = [0,1];
-%tspan = linspace(0,1,365);
-% ODE solver (solve model to equilibrium)
-% %scal = Data(1,2);
-% T = []; Y = [];
-% for i = 1:10
-%     [t,y] = ode45(@HATmodel,tspan, y0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
-%                betaVH,tauV,k,nuH,muH,betaH,tauH,gammaH1,gammaH2, ...
-%                P1,P1PD,P1TP,P2,P2PD,P2TP,eps1, ...
-%                eps2,p2,deltaH,zeta1,zeta2,rho,l,m);
-%     tspan = [i+(1/25),i+1];
-%     y0 = y(end,:);
-%     y0(10) = y0(10) + Data(1,2)*(1-exp(-scal*(y0(7)+y(9))))*P1PD*(y0(7)+y0(9));
-%     y0(7) = y0(7) - Data(1,2)*(1-exp(-scal*(y0(7)+y(9))))*P1PD*y0(7);
-%     y0(9) = y0(9) - Data(1,2)*(1-exp(-scal*(y0(7)+y(9))))*P1PD*y0(9);
-%     y0(11) =0;
-%     T = vertcat(T,t);
-%     Y = vertcat(Y,y);
-% end
-%plot(T,Y)
-
-
 tspan = [0,1];
 ms = 1;
 
