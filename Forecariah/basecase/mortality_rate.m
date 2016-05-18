@@ -15,7 +15,7 @@ elseif t > l & t < l+d
 else
     out = 0;
 end
-
+%mortality_rate(rho, t, l, d)
 
 
 

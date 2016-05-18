@@ -66,21 +66,8 @@ alpha5 = alpha3*tauV/(muV+x)
 alpha6 = gammaH1*alpha5/(rho*eps*zeta+(1-rho)*gammaH2+rho*(1-eps2)*p*zeta+muH)
 alpha7 = alpha6*rho*eps*zeta/(deltaH+muH)
 alpha8 = H^2*muV0*muV1*(a+sigmaV+muV+x)*(tauV+muV+x)+(muV+x)*(tauV+muH)*(gammaH1+muH)/
-            (BV*a^3*betaV^2*betaVH^2*tauV*tauH*(muV-muV0))
-alpha9 = alpha2*(2*a+sigmaV)/(muV+x)
-alpha10 = alpha2*alpha6*(gammaH1*alpha5-alpha6*(rho*eps2*zeta-muH))/(H*alpha5*(muV+x))
-
+            BV*a^3*betaV^2*betaVH^2*tauV&
 % V0 and H0 in terms of parameters (equilibrium conditons)
-HE = (H-alpha8)/(alpha7+alpha6+alpha3+1)
-VP = alpha1
-VS = apha2
-VE = alpha4*HE
-VI = alpha5*HE
-HI1 = alpha3*HE
-HI2 = alpha6*HE
-HR = alpha7*HE
-HS = alpha8
-VR = alpha9 - alpha10*HE
 
 % Time span
 tspan = [0,10]; %changed from 1000*****

@@ -22,9 +22,11 @@ Data = [3,2,9.53;
         4,8, 0  ;
         7,13,0  ;
         3,4, 0 ];
-SampSize = [1488,1488,1634;
-            4514,4514,0;
-            7708,7708,0;
+%11349 = total screened households(?) in 2008 in Forecariah. 19 cases.
+%SampSize from Dubreka HAT treatment center
+SampSize = [7586,7586,1634; 
+            4334,4334,0; %3763+571
+            357,357,0;
             7788,7788,0];
 
 %% Calculate 95% CI for data points
