@@ -1,7 +1,5 @@
 function[out]  = runHATmodel(x)
-
 %tic;
-
 %% Tsetse Parameters (All rates are in years)
 eta = 365./20;                       % 1/eta: pupae stage duration
 BV = 365*0.05;                       % Tsetse constant birth rate
