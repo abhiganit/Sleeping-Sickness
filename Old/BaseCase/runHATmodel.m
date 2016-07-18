@@ -1,3 +1,9 @@
+% out = runHATmodel([0.1,0.2,0.2,0.3])
+% out{1}
+% out{2}
+% out{3}
+% out{4}
+%%
 function[out]  = runHATmodel(x)
 
 %tic;
@@ -11,7 +17,7 @@ sigmaV = 365.;                       % 1/sigmaV: Susceptibility period in Tsetse
 aH = 365/3;                          % Tsetse biting rate
 betaVH = x(1);                       % Tran. prob. from humans to Tsetse
 tauV = 365./25;                      % 1/tauV: incubation period in tsetse
-V = 5000;                             % Tsetse population size (carrying capacity)
+V = 5000;                            % Tsetse population size (carrying capacity)
 
 %% Human Parameters (All rates are in years)
 muH = 1/59;                          % Human natural death rate
@@ -19,7 +25,7 @@ betaH = x(2);                        % Trans. prob. from tsetse to humans
 tauH = 365./12;                      % 1/tauH:incubation period in humans
 gammaH1 = 365/526;                   % 1/gammaH1: 1st stage infectious period in humans
 gammaH2 = 365/252;                   % 1/gammaH2: 2nd stage infectious period in humans
-H = 300;                             % Human population size
+H = 18000;                           % Human population size [F]
 
 %% Human Treatment Parameters
 P1 = 0.0;                            % Prob. a stage I individual gets CATT test
@@ -35,6 +41,7 @@ deltaH = 365./50;                    % 1/deltaH: immune period in  humans after 
 zeta1 = 1/1 ;
 zeta2 = 1/x(3);
 
+%TL = trypanolysis serological test for HAT surveillance
 
 %% Vector Treatment Parameters
 rho = 0.0;                           % constrant mortality rate
@@ -49,8 +56,34 @@ V0 = [BV*V/eta,0.99*V, 0, 0.01*V,0];   % (Vp,Vs,Ve,Vi,Vr)
 H0 = [H,0,0,0,0,0];                  % (Hs,He,Hi1,Hi2,Hr,Hc)
 y0 = horzcat(V0,H0);
 
+% Initial conditions using equilibrium conditions
+% Constants
+alpha1 = BV*(muV-muV0)/nV*muV0*muV1
+alpha2 = nV*alpha1/(a+sigmaV+muV+x)
+alpha3 = tauH/(gammaH1+muH)
+alpha4 = alpha2*a*betaV*betaVH*tauH/(H*(tauV+muV+x)*(gammaH1+muH))
+alpha5 = alpha3*tauV/(muV+x)
+alpha6 = gammaH1*alpha5/(rho*eps*zeta+(1-rho)*gammaH2+rho*(1-eps2)*p*zeta+muH)
+alpha7 = alpha6*rho*eps*zeta/(deltaH+muH)
+alpha8 = H^2*muV0*muV1*(a+sigmaV+muV+x)*(tauV+muV+x)+(muV+x)*(tauV+muH)*(gammaH1+muH)/
+            (BV*a^3*betaV^2*betaVH^2*tauV*tauH*(muV-muV0))
+alpha9 = alpha2*(2*a+sigmaV)/(muV+x)
+alpha10 = alpha2*alpha6*(gammaH1*alpha5-alpha6*(rho*eps2*zeta-muH))/(H*alpha5*(muV+x))
+
+% V0 and H0 in terms of parameters (equilibrium conditons)
+HE = (H-alpha8)/(alpha7+alpha6+alpha3+1)
+VP = alpha1
+VS = apha2
+VE = alpha4*HE
+VI = alpha5*HE
+HI1 = alpha3*HE
+HI2 = alpha6*HE
+HR = alpha7*HE
+HS = alpha8
+VR = alpha9 - alpha10*HE
+
 % Time span
-tspan = [0,1000];
+tspan = [0,10]; %changed from 1000*****
 % ODE solver (solve model to equilibrium)
 [t,y] = ode23s(@HATmodel,tspan, y0, [], eta,BV,muV0,muV1,sigmaV,aH, ...
                betaVH,tauV,muH,betaH,tauH,gammaH1,gammaH2, ...
@@ -65,7 +98,7 @@ V = y(end,4)/sum(y(end,2:5));       % 2008
 % In year 2008, there was active surveillance in Boffa East
 % mainland with  coverage= (attendance*sensitivity)
 y01 = y(end,:);
-cov = 0.1026*0.87;
+cov = 0.6305*0.87; % total screened: 11349 = 60% in 2008 [F]
 y01(10) = y01(10) + cov*(y01(8)+y01(9));
 y01(8) = (1-cov)*y01(8); y01(9) = (1-cov)*y01(9);
 
